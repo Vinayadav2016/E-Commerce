@@ -5,7 +5,7 @@ import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
 import { Link } from "react-router-dom";
 const Collection = () => {
-  
+  const [showFilter, setShowFilter] = useState(false);
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 px-4 sm:px-6 md:px-10 lg:px-14 mt-14">
       {/* filter options */}
@@ -95,7 +95,7 @@ const Collection = () => {
           </select>
         </div>
         {/* map products */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
+        {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
           {productList.map(({ id, title, price, thumbnail }) => (
             <Link to={`/product/${id}`} className="hover:scale-110">
               <ProductItem
@@ -107,7 +107,7 @@ const Collection = () => {
               />
             </Link>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );
