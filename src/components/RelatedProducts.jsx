@@ -18,15 +18,22 @@ const RelatedProducts = () => {
             <Title text1={"RELATED"} text2={"PRODUCTS"} />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-            {data.map(({ id, name, thumbnail, price }, index) => (
-              <ProductItem
-                key={id}
-                id={id}
-                name={name}
-                image={thumbnail}
-                price={price}
-              />
-            ))}
+            {data.map(
+              (
+                { id, name, thumbnail, price, rating, discountPercentage },
+                index
+              ) => (
+                <ProductItem
+                  key={id}
+                  id={id}
+                  name={name}
+                  image={thumbnail}
+                  price={price}
+                  rating={rating}
+                  discountPercentage={discountPercentage}
+                />
+              )
+            )}
           </div>
         </div>
       )}

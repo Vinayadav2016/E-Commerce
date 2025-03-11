@@ -6,6 +6,7 @@ module.exports = {
       keyframes: {
         "slide-in": {
           "0%": { transform: "translateY(10%)" },
+          "70%": { transform: "translateY(-3%)" },
           "100%": { transform: "translateY(0)" },
         },
         "exit-left": {

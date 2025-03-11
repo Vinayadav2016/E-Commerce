@@ -10,7 +10,7 @@ export function ModalWrapper({ closeModal, children }) {
   return createPortal(
     <>
       <div
-        className="fixed top-0 right-0 left-0 bottom-0 bg-transparent"
+        className="fixed top-0 right-0 left-0 bottom-0 bg-slate-600 bg-opacity-10 dark:bg-slate-800 dark:bg-opacity-50"
         onClick={closeModal}
       ></div>
       {children}

@@ -11,15 +11,17 @@ import Orders from "./pages/Orders";
 import About from "./pages/About";
 import Navbar from "./components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchData } from "./store/productsSlice";
+import { fetchData, fetchCategories } from "./store/productsSlice";
 import Footer from "./components/Footer";
 import { fetchCartData } from "./store/cartSlice";
 
 const App = () => {
   const dispatch = useDispatch();
+  const productList = useSelector((state) => state.products.list);
   useEffect(() => {
-    dispatch(fetchData());
+    dispatch(fetchData(productList.length));
     dispatch(fetchCartData(6));
+    dispatch(fetchCategories());
   }, []);
 
   return (

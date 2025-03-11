@@ -24,22 +24,25 @@ function ButtonContainer({ onClick = () => {}, left = false }) {
 const ProductListContainer = ({ productList = [] }) => {
   return (
     <>
-      {productList.map(({ id, thumbnail, title, price }, index) => {
-        return (
-          <Link
-            key={index}
-            className="group-hover:[&:not(&:hover)]:opacity-70 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 h-full flex-shrink-0 flex-grow-0 flex flex-col items-center justify-center hover:scale-110 transition-all duration-500 ease-in-out"
-            to={`product/${id}`}
-          >
-            <ProductItem
-              id={id}
-              thumbnail={thumbnail}
-              title={title}
-              price={price}
-            />
-          </Link>
-        );
-      })}
+      {productList.map(
+        ({ id, thumbnail, title, price, discountPercentage }, index) => {
+          return (
+            <Link
+              key={index}
+              className="group-hover:[&:not(&:hover)]:opacity-70 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 h-full flex-shrink-0 flex-grow-0 flex flex-col items-center justify-center hover:scale-110 transition-all duration-500 ease-in-out"
+              to={`product/${id}`}
+            >
+              <ProductItem
+                id={id}
+                thumbnail={thumbnail}
+                title={title}
+                price={price}
+                discountPercentage={discountPercentage}
+              />
+            </Link>
+          );
+        }
+      )}
     </>
   );
 };
@@ -62,7 +65,7 @@ function ListContainer({
   return (
     <div
       className={
-        `w-full flex absolute top-0 bottom-0 ` +
+        `w-full flex absolute top-10 bottom-10 bg-pink-400` +
         `${
           transitionNone
             ? "transition-none"
@@ -166,7 +169,7 @@ export function InLoopProductSlider({ productList = [] }) {
 
   return (
     <div className="w-full relative p-4 animate-slide-in">
-      <div className="group w-full aspect-[1/0.6] sm:aspect-[2/1] md:aspect-[3/1] lg:aspect-[4/1]  flex items-center relative overflow-hidden">
+      <div className="group w-full aspect-[1/1] sm:aspect-[2/1] lg:aspect-[3/1]  flex items-center relative overflow-hidden">
         {/* first list */}
         <ListContainer
           leftPosition={leftFirstList}

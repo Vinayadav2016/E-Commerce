@@ -1,20 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 const SlideInWrapper = ({ children }) => {
-  const ref = useRef(null);
+  const ref = useRef();
+
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.3 }
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          // console.log("Element entered viewport");
+          setIsVisible(true);
+        } else if (entry.intersectionRatio === 0 && isVisible) {
+          // console.log("Element completely out of viewport");
+          setIsVisible(false);
+        }
+      },
+      { threshold: [0, 0.5] } // Detects both full exit (0) and partial visibility (0.3)
     );
-
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+      observer.disconnect();
+    };
+  }, [isVisible]);
   return (
-    <div ref={ref} className={isVisible ? "animate-slide-in" : ""}>
+    <div ref={ref} className={isVisible ? "animate-slide-in" : "opacity-0"}>
       {children}
     </div>
   );
