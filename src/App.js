@@ -25,7 +25,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="w-full dark:bg-slate-600 overflow-y-scroll">
+    <div className="w-full bg-gray-300 dark:bg-slate-600 overflow-y-scroll">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

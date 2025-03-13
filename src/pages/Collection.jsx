@@ -215,7 +215,7 @@ const SortByContainer = ({ selectedSort }) => {
         <IoIosArrowDropdown className={showOptions ? "rotate-180" : " "} />
       </div>
       {showOptions && (
-        <div className="absolute z-10 top-[110%] left-0 w-full bg-gray-200 rounded-lg shadow-lg shadow-slate-800 dark:bg-slate-600 animate-slide-in">
+        <div className="absolute z-10 top-[110%] left-0 w-full bg-gray-300 rounded-lg shadow-lg shadow-slate-800 dark:bg-slate-600 animate-slide-in">
           {sortByOptions.map((option, index) => {
             return (
               <SortByOption
