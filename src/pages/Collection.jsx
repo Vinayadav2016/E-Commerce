@@ -15,21 +15,9 @@ import SlideInWrapper from "../components/SlideInWrapper";
 import { ModalWrapper } from "../modal/ModalWrapper";
 import CategoryListModal from "../modal/CategoryListModal";
 
-const Category = ({
-  key,
-  selectedCategory,
-  category,
-  handleCategoryChange,
-}) => {
-  console.log(
-    selectedCategory === category,
-    " selected category ",
-    selectedCategory,
-    category
-  );
+const Category = ({ selectedCategory, category, handleCategoryChange }) => {
   return (
     <div
-      key={key}
       onClick={() => handleCategoryChange(category)}
       className={
         "uppercase w-1/2 p-2 py-3 sm:w-full dark:text-gray-200 rounded-md transition-all duration-300 ease-in-out " +
@@ -204,7 +192,6 @@ const SortByOption = ({ option, setShowOptions }) => {
 
 const SortByContainer = ({ selectedSort }) => {
   const [showOptions, setShowOptions] = useState(false);
-  console.log(selectedSort, "selected sort");
   return (
     <div className="group w-full md:w-1/4 min-w-[200px] relative flex flex-col p-3 bg-slate-400 dark:bg-slate-800 dark:text-gray-200 font-semibold text-md  shadow-lg shadow-slate-800 text-sm rounded-lg ">
       <div
@@ -242,7 +229,6 @@ const Collection = () => {
     selectedSort,
     hasMore = true,
   } = useSelector((state) => state.products);
-  console.log(productList, "product list in collection");
   const lastProductElementRef = useCallback(
     (node) => {
       if (isLoading) return;

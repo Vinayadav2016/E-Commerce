@@ -21,10 +21,7 @@ function ButtonContainer({ onClick = () => {}, left = false }) {
   );
 }
 
-function ImageSlider() {
-  const productList = useSelector(
-    (state) => state.products.list.slice(0, 10) || []
-  );
+function ImageSlider({ productList }) {
   const [imageIndex, setImageIndex] = useState(0);
   const handleLeftClick = () => {
     setImageIndex(imageIndex > 0 ? imageIndex - 1 : productList.length - 1);
@@ -42,9 +39,10 @@ function ImageSlider() {
   return (
     <div className="w-full sm:w-1/2 aspect-[2/1] relative p-4">
       <div className="w-full h-full flex overflow-hidden">
-        {productList.map((product) => {
+        {productList.map((product, index) => {
           return (
             <Link
+              key={index}
               className="w-full h-full flex-shrink-0 flex-grow-0"
               to={`product/${product.id}`}
               style={{ translate: `${-100 * imageIndex}%` }}
@@ -91,12 +89,13 @@ function TextContainer() {
 }
 
 const Hero = () => {
+  const { list: productList } = useSelector((state) => state.products || []);
   return (
     <div className="w-full sm:flex bg-slate-400 dark:bg-slate-800 p-2 sm:p-4 md:p-8 lg:p-12">
       {/* text */}
       <TextContainer />
       {/* image slider */}
-      <ImageSlider />
+      <ImageSlider productList={productList.slice(0, 10)} />
     </div>
   );
 };

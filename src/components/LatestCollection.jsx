@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import Title from "./Title";
 import { useEffect, useState } from "react";
-import { InLoopProductSlider } from "./InLoopProductSlider";
+import { ProductCarousel } from "./ProductCarousel.jsx";
 
 export default function LatestCollection() {
   const {
@@ -32,7 +32,7 @@ export default function LatestCollection() {
           {error ? (
             <h1>errorr</h1>
           ) : (
-            <InLoopProductSlider productList={latestProducts} />
+            <ProductCarousel productList={latestProducts} />
           )}
         </>
       )}

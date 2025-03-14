@@ -1,0 +1,29 @@
+@keyframes move-left-5 {
+  from {
+    transform: translateX(calc(-100% / 5 * 2));
+  }
+}
+
+@keyframes move-left-4 {
+  from {
+    transform: translateX(calc(-100% / 4 * 2));
+  }
+}
+
+@keyframes move-left-3 {
+  from {
+    transform: translateX(calc(-100% / 3 * 2));
+  }
+}
+
+@keyframes move-left-2 {
+  from {
+    transform: translateX(calc(-100% / 2 * 2));
+  }
+}
+
+@keyframes move-right {
+  from {
+    transform: translateX(0%);
+  }
+}

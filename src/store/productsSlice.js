@@ -57,7 +57,6 @@ export const productsSlice = createSlice({
     list: [],
     error: "",
     currency: "$",
-    delivery_fee: 10,
   },
   reducers: {
     resetProducts: (state) => {
@@ -78,9 +77,7 @@ export const productsSlice = createSlice({
       })
       .addCase(fetchData.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload;
         state.list = [...state.list, ...(action.payload.products || [])];
-        console.log(state.list, action.payload.total);
         state.hasMore = state.list.length < action.payload.total;
       })
       .addCase(fetchData.rejected, (state, action) => {

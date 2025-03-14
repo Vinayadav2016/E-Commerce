@@ -33,7 +33,7 @@ const NewsLetterBox = () => {
           />
           {!email && (
             <label
-              for="email"
+              htmlFor="email"
               className={`text-xs sm:text-sm md:text-base absolute top-1/2 -translate-y-1/2  peer-focus:-top-1 transition-all duration-500 ease-in-out cursor-text dark:text-gray-200`}
             >
               Enter Your Email Address

@@ -4,12 +4,6 @@ export const Rating = ({ rating }) => {
   return (
     <div className="flex items-center gap-1 ">
       {[...Array(5)].map((_, index) => {
-        console.log(
-          " rating out of five ",
-          index,
-          " index ",
-          tempRating - index
-        );
         return (
           <div className="relative" key={index}>
             {tempRating - index >= 1 ? (

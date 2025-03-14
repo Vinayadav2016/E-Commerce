@@ -4,9 +4,11 @@ import { fetchProductData } from "../store/singleProductSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRelatedData } from "../store/relatedProductsSlice";
 import RelatedProducts from "../components/RelatedProducts";
+import SlideInWrapper from "../components/SlideInWrapper";
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
 import "./Product.css";
 import { Rating } from "../components/Rating";
+import { ProductCarousel } from "../components/ProductCarousel";
 function CarousalImage({ image, index, buttonPressed }) {
   const animation = buttonPressed
     ? buttonPressed === "right"
@@ -74,7 +76,7 @@ function Carousal({ data }) {
     }
   }
   return (
-    <div className="w-full py-2 flex flex-col sm:flex-row flex-wrap items-center justify-around min-h-[70dvh]">
+    <div className="w-full py-2 flex flex-col sm:flex-row flex-wrap items-center justify-around min-h-[90dvh]">
       <div className="peer w-full flex-1 lg:w-1/2 h-[65dvh] relative">
         {[...images, ...images].slice(0, 4).map((image, index) => (
           <CarousalImage
@@ -85,7 +87,7 @@ function Carousal({ data }) {
           />
         ))}
       </div>
-      <ProductDetail data={data} />
+      {data && <ProductDetail data={data} />}
       <div className="w-full px-5 flex justify-between peer-hover:[&>*]:animate-pulse peer-hover:[&>*]:opacity-100 [&>*]:cursor-pointer">
         <FaArrowCircleLeft
           className="size-5 sm:size-10 opacity-50 hover:opacity-100"
@@ -100,6 +102,85 @@ function Carousal({ data }) {
   );
 }
 
+const DescriptionText = ({ title = "", value = "" }) => {
+  return (
+    <div className="flex">
+      <span className="min-w-32 text-slate-800 font-semibold">{title}</span>{" "}
+      <span className="text-gray-400">{value}</span>{" "}
+    </div>
+  );
+};
+
+const ReviewDialog = ({ data }) => {
+  return (
+    <div className=" bg-slate-400 bg-opacity-10 p-4 rounded-lg flex flex-col items-center justify-center shadow-md shadow-slate-800">
+      <div className="uppercase text-xl font-semibold text-center">
+        {data?.reviewerName}
+      </div>
+      <div className="text-lg text-slate-800 text-center">
+        {data?.reviewerEmail}
+      </div>
+      <Rating rating={data?.rating} />
+      <div className=" text-2xl text-gray-300 text-center">
+        <span className="text-3xl">"</span>
+        {data?.comment}
+        <span className="text-3xl">"</span>
+      </div>
+    </div>
+  );
+};
+
+const DetailsContainer = ({ data }) => {
+  const [isReviewTabSelected, setIsReviewTabSelected] = useState(false);
+  return (
+    <div className="mx-5 mt-5 dark:bg-slate-600 border-[6px] border-slate-800 rounded-lg shadow-lg shadow-slate-800  ">
+      <div className="flex items-center bg-slate-800 dark:text-gray-300">
+        <button
+          className={`font-semibold px-4 py-2 text-xl   ${
+            isReviewTabSelected ? "" : "dark:bg-slate-600"
+          } rounded-t-lg transition-all duration-500 ease-in-out`}
+          onClick={() => setIsReviewTabSelected(false)}
+        >
+          Product Details
+        </button>
+        <button
+          className={`font-semibold px-4 py-2 text-xl ${
+            isReviewTabSelected ? "dark:bg-slate-600" : ""
+          } rounded-t-lg transition-all duration-500 ease-in-out`}
+          onClick={() => setIsReviewTabSelected(true)}
+        >
+          Reviews
+        </button>
+      </div>
+      <div className="p-5 h-[250px] font-medium text-lg flex flex-col gap-2 overflow-y-scroll">
+        {isReviewTabSelected ? (
+          data.reviews.map((review, index) => {
+            return <ReviewDialog key={index} data={review} />;
+          })
+        ) : (
+          <div className="bg-slate-400 bg-opacity-10 rounded-lg p-5">
+            <div className="flex justify-between items-start flex-wrap ">
+              <DescriptionText title="Product Name" value={data?.title} />
+              <Rating rating={data?.rating} />
+            </div>
+            <DescriptionText title="Brand" value={data?.brand} />
+            <DescriptionText
+              title="Warranty"
+              value={data?.warrantyInformation}
+            />
+            <DescriptionText
+              title="Shipping"
+              value={data?.shippingInformation}
+            />
+            <DescriptionText title="Return Policy" value={data?.returnPolicy} />
+            <DescriptionText title="Description" value={data?.description} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const ProductDetail = ({
   data: {
     title = "",
@@ -110,6 +191,7 @@ const ProductDetail = ({
     rating = "",
     returnPolicy = "",
     discountPercentage = 0,
+    id="", 
   },
 }) => {
   return (
@@ -149,7 +231,6 @@ const Product = () => {
   const { isLoading, data, error } = useSelector(
     (state) => state.singleProduct || null
   );
-
   const dispatch = useDispatch();
   useEffect(() => {
     // fetch product details from API using productId
@@ -163,32 +244,13 @@ const Product = () => {
   }, [data]);
 
   return (
-    <div className="mt-14 transition-opacity ease-in duration-500 opacity-100">
+    <div className="mt-14">
       {/* product data */}
       <Carousal data={data} />
-      {/* reviews */}
-      {/* <div className="mt-20">
-        <div className="flex">
-          <b className="border px-5 py-3 text-sm">Description</b>
-          <p className="border px-5 py-3 text-sm">Reviews (122)</p>
-        </div>
-        <div className="flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-            minima aut a, repellendus hic pariatur veniam praesentium sint
-            corrupti, illum doloremque eveniet vero voluptatibus asperiores
-            incidunt saepe. Commodi, quos consectetur?
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem
-            aperiam rerum repudiandae id eaque? Eveniet, dignissimos, reiciendis
-            impedit cumque ipsa enim placeat recusandae voluptatibus earum
-            suscipit repellendus eum nam magni?
-          </p>
-        </div>
-      </div> */}
-      {/* related products */}
-      {/* <RelatedProducts /> */}
+      <SlideInWrapper>
+        <DetailsContainer data={data} />
+      </SlideInWrapper>
+      <RelatedProducts />
     </div>
   );
 };

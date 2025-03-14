@@ -19,19 +19,45 @@ const slice = createSlice({
   initialState: {
     isLoading: false,
     error: null,
+    updateErrorMsg: null,
+    updateSuccessMsg: null,
     data: null,
   },
   reducers: {
-    // addProductIntoCart(state, action) {
-    //   const index = state.data.products.findIndex(
-    //     (product) => product.id === action.payload.id
-    //   );
-    //   if (index == -1) {
-    //     state.data.products.push(action.payload);
-    //   } else {
-    //     state.data.products[index].quantity += action.payload.quantity;
-    //   }
-    // },
+    addProductToCart: (state, { payload: { data, id } }) => {
+      if (state.data[id]) {
+        if (state.data[id].quantity < data.stock) state.data[id].quantity++;
+        else
+          state.updateErrorMsg = {
+            type: "addItem",
+            msg: "There is no more stock of the item",
+          };
+      } else {
+        state.data[id] = { ...data, quantity: 1 };
+        state.updateSuccessMsg = {
+          type: "addItem",
+          msg: "Item is added into the cart",
+        };
+      }
+    },
+    removeProductFromCart: (state, { payload: { id } }) => {
+      if (state.data[id]) {
+        if (state.data[id].quantity === 1) {
+          delete state.data[id];
+        } else {
+          state.data[id].quantity--;
+        }
+        state.updateSuccessMsg = {
+          type: "removeItem",
+          msg: "Successfully removed the item",
+        };
+      } else {
+        state.updateErrorMsg = {
+          type: "removeItem",
+          msg: "there is no such product in cart",
+        };
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCartData.pending, (state, action) => {
@@ -50,3 +76,4 @@ const slice = createSlice({
 });
 
 export const cartReducer = slice.reducer;
+export const { addProductToCart, removeProductFromCart } = slice.actions;
