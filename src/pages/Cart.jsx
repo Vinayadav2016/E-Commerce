@@ -1,19 +1,20 @@
 import React from "react";
 import Title from "../components/Title";
 import { MdDelete } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import CartTotal from "../components/CartTotal";
 import { Link } from "react-router-dom";
+import { removeProductFromCart } from "../store/cartSlice";
 const Cart = () => {
-  const { isLoading, error, data } = useSelector((state) => state.cart);
-  const { products } = data;
+  const { isLoading, error, data = {} } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   return (
     <div className="border-t pt-14">
       <div className="text-2xl mb-3">
         <Title text1={"YOUR"} text2={"CART"} />
       </div>
       <div>
-        {products.map((item, index) => {
+        {Object.values(data).map((item, index) => {
           return (
             <div
               key={index}
@@ -26,7 +27,7 @@ const Cart = () => {
                   className="w-16 sm:w-20 h-16"
                 />
                 <div>
-                  <p className="text-xs sm:text-lg font-medium">{item.name}</p>
+                  <p className="text-xs sm:text-lg font-medium">{item.title}</p>
                   <div className="flex items-center gap-5 mt-2">
                     <p>{item.price}</p>
                   </div>
@@ -38,7 +39,12 @@ const Cart = () => {
                 min={1}
                 defaultValue={item.quantity}
               />
-              <MdDelete className="w-4 mr-4 sm:w-5 cursor-pointer" />
+              <MdDelete
+                onClick={() => {
+                  dispatch(removeProductFromCart({ id: item.id }));
+                }}
+                className="w-4 mr-4 sm:w-5 cursor-pointer"
+              />
             </div>
           );
         })}

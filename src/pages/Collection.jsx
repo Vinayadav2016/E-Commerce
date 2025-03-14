@@ -127,7 +127,7 @@ const ProductList = ({ productList, isLoading, lastProductElementRef }) => {
           index
         ) => {
           return (
-            <SlideInWrapper key={id}>
+            <SlideInWrapper key={index}>
               <Link
                 ref={
                   index === productList.length - 1
@@ -138,7 +138,6 @@ const ProductList = ({ productList, isLoading, lastProductElementRef }) => {
                 className="hover:scale-110 transition-all duration-500 ease-in-out flex justify-center h-full"
               >
                 <ProductItem
-                  key={id}
                   id={id}
                   title={title}
                   thumbnail={thumbnail}

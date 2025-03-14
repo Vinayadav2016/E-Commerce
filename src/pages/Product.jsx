@@ -9,6 +9,7 @@ import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
 import "./Product.css";
 import { Rating } from "../components/Rating";
 import { ProductCarousel } from "../components/ProductCarousel";
+import { addProductToCart } from "../store/cartSlice";
 function CarousalImage({ image, index, buttonPressed }) {
   const animation = buttonPressed
     ? buttonPressed === "right"
@@ -191,9 +192,12 @@ const ProductDetail = ({
     rating = "",
     returnPolicy = "",
     discountPercentage = 0,
-    id="", 
+    id = "",
+    stock = "",
+    thumbnail = "",
   },
 }) => {
+  const dispatch = useDispatch();
   return (
     <div className="z-20 flex flex-col px-4 items-center sm:items-start gap-2 w-full sm:w-1/2">
       <div className="text-xl font-semibold dark:text-gray-200 text-center sm:text-left">
@@ -214,7 +218,17 @@ const ProductDetail = ({
       <p className="hidden sm:block md:w-4/5 text-slate-600 dark:text-gray-400">
         {description}
       </p>
-      <button className="w-40 bg-black text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 ">
+      <button
+        className="w-40 bg-black text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 "
+        onClick={() =>
+          dispatch(
+            addProductToCart({
+              id,
+              data: { id, price, stock, thumbnail, title },
+            })
+          )
+        }
+      >
         ADD TO CART
       </button>
       <div className="hidden text-sm text-slate-800 dark:text-gray-300 mt-5 sm:flex gap-1 flex-wrap">
