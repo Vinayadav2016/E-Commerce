@@ -27,6 +27,9 @@ export const ProductCarousel = ({ productList = [] }) => {
     if (buttonPressed) {
       const id = setTimeout(() => setButtonPressed(false), 500);
       return () => clearTimeout(id);
+    } else {
+      const id = setTimeout(() => handleCarousalClick(false), 1500);
+      return () => clearTimeout(id);
     }
   }, [buttonPressed]);
   useEffect(() => {
@@ -61,7 +64,7 @@ export const ProductCarousel = ({ productList = [] }) => {
       >
         <FaArrowAltCircleLeft className="size-4 md:size-6 lg:size-8 group-hover:scale-125 dark:text-gray-200 bg-white dark:bg-black rounded-full" />
       </div>
-      <div className="overflow-hidden w-full">
+      <div className="overflow-hidden w-full p-x-1">
         <div
           className="my-8 relative flex justify-between [&>*]:flex-grow-0 [&>*]:flex-shrink-0 [&>*]:w-1/2 [&>*]:sm:w-1/3 [&>*]:md:w-1/4 [&>*]:lg:w-1/5 -translate-x-1/2 sm:-translate-x-1/3 md:-translate-x-1/4 lg:-translate-x-[20%] "
           style={{
@@ -74,23 +77,9 @@ export const ProductCarousel = ({ productList = [] }) => {
               : "",
           }}
         >
-          {list.map(
-            ({ id, thumbnail, title, price, discountPercentage }, index) => (
-              <Link
-                className="hover:scale-110 flex justify-center items-center"
-                to={`/product/${id}`}
-                key={index}
-              >
-                <ProductItem
-                  id={id}
-                  thumbnail={thumbnail}
-                  title={title}
-                  price={price}
-                  discountPercentage={discountPercentage}
-                />
-              </Link>
-            )
-          )}
+          {list.map((product, index) => (
+            <ProductItem key={index} data={product} />
+          ))}
         </div>
       </div>
 

@@ -4,13 +4,22 @@ import { MdDelete } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import CartTotal from "../components/CartTotal";
 import { Link } from "react-router-dom";
-import { removeProductFromCart } from "../store/cartSlice";
+import {
+  addProductToCart,
+  deleteProductFromCart,
+  removeProductFromCart,
+} from "../store/cartSlice";
+import { Rating } from "../components/Rating";
+import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
+import { AiOutlineDelete } from "react-icons/ai";
+import { FaRegHeart } from "react-icons/fa";
+import { addItemToWishList } from "../store/wishlistSlice";
 const Cart = () => {
   const { isLoading, error, data = {} } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   return (
-    <div className="border-t pt-14">
-      <div className="text-2xl mb-3">
+    <div className="mt-14 py-5 px-2 sm:px-4 md:px-8 lg:px-12">
+      <div className="text-2xl my-5">
         <Title text1={"YOUR"} text2={"CART"} />
       </div>
       <div>
@@ -18,33 +27,74 @@ const Cart = () => {
           return (
             <div
               key={index}
-              className="py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] item-center gap-4"
+              className="flex mb-5 px-4 justify-between items-center flex-wrap md:flex-nowrap"
             >
-              <div className="flex items-start gap-6">
+              <div className="w-full sm:w-1/2 md:w-1/3 flex items-start gap-6">
                 <img
                   src={item.thumbnail}
                   alt={item.title}
-                  className="w-16 sm:w-20 h-16"
+                  className="size-16 sm:size-20"
                 />
                 <div>
-                  <p className="text-xs sm:text-lg font-medium">{item.title}</p>
-                  <div className="flex items-center gap-5 mt-2">
-                    <p>{item.price}</p>
-                  </div>
+                  <p className="text-xs sm:text-lg font-medium dark:text-gray-300">
+                    {item.title}
+                  </p>
+                  <span className="text-lg font-medium">
+                    ${item.price.toFixed(2)}{" "}
+                    <span className="pl-3 text-sm dark:text-gray-300">
+                      {item.discountPercentage
+                        ? ` ( ${item.discountPercentage}% OFF )`
+                        : ""}
+                    </span>
+                  </span>
+                  <Rating rating={item.rating} />
                 </div>
               </div>
-              <input
-                className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1"
-                type="number"
-                min={1}
-                defaultValue={item.quantity}
-              />
-              <MdDelete
+              <div className="flex items-center py-4 px-4 ">
+                {item.quantity > 1 ? (
+                  <CiCircleMinus
+                    className="size-6 dark:text-gray-300 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out"
+                    onClick={() => {
+                      dispatch(removeProductFromCart({ id: item.id }));
+                    }}
+                  />
+                ) : (
+                  <AiOutlineDelete
+                    onClick={() => {
+                      dispatch(deleteProductFromCart({ id: item.id }));
+                    }}
+                    className="size-6 dark:text-gray-200 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out"
+                  />
+                )}
+
+                <span className="px-3 font-medium text-xl dark:text-gray-200 transition-all duration-300 ease-in-out">
+                  {item.quantity}
+                </span>
+
+                <CiCirclePlus
+                  className="size-6 dark:text-gray-300 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out"
+                  onClick={() => {
+                    dispatch(addProductToCart(item));
+                  }}
+                />
+              </div>
+
+              <FaRegHeart
                 onClick={() => {
-                  dispatch(removeProductFromCart({ id: item.id }));
+                  dispatch(deleteProductFromCart({ id: item.id }));
+                  dispatch(addItemToWishList(item));
                 }}
-                className="w-4 mr-4 sm:w-5 cursor-pointer"
+                className="hover:scale-110 md:hidden ml-1 size-5 cursor-pointer dark:text-gray-300"
               />
+              <button
+                className="hidden md:flex w-30 bg-slate-400 dark:bg-slate-700  dark:text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 items-center justify-center"
+                onClick={() => {
+                  dispatch(deleteProductFromCart({ id: item.id }));
+                  dispatch(addItemToWishList(item));
+                }}
+              >
+                MOVE TO <FaRegHeart className="pl-1 size-5" />
+              </button>
             </div>
           );
         })}
@@ -52,9 +102,9 @@ const Cart = () => {
       <div className="flex justify-end my-20">
         <div className="w-full sm:w-[450px]">
           <CartTotal />
-          <div className="w-full text-end">
+          <div className="w-full mt-5 text-end">
             <Link to="/placeOrder">
-              <button className="bg-black text-white text-sm my-8 px-8 py-3">
+              <button className="w-30 text-white bg-black text-xs sm:text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 sm:py-3 px-3 md:py-4 md:px-5 items-center justify-center">
                 PROCEED TO CHECKOUT
               </button>
             </Link>

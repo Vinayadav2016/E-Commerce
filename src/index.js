@@ -10,6 +10,8 @@ import { Provider } from "react-redux";
 import { productReducer } from "./store/singleProductSlice";
 import { relatedProductsReducer } from "./store/relatedProductsSlice";
 import { cartReducer } from "./store/cartSlice";
+import { wishlistReducer } from "./store/wishlistSlice";
+import { userReducer } from "./store/userSlice";
 
 const store = configureStore({
   reducer: {
@@ -17,6 +19,8 @@ const store = configureStore({
     singleProduct: productReducer,
     relatedProducts: relatedProductsReducer,
     cart: cartReducer,
+    wishlist: wishlistReducer,
+    user: userReducer,
   },
 });
 

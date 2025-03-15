@@ -10,6 +10,11 @@ import "./Product.css";
 import { Rating } from "../components/Rating";
 import { ProductCarousel } from "../components/ProductCarousel";
 import { addProductToCart } from "../store/cartSlice";
+import {
+  addItemToWishList,
+  removeItemFromWishList,
+} from "../store/wishlistSlice";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 function CarousalImage({ image, index, buttonPressed }) {
   const animation = buttonPressed
     ? buttonPressed === "right"
@@ -77,7 +82,7 @@ function Carousal({ data }) {
     }
   }
   return (
-    <div className="w-full py-2 flex flex-col sm:flex-row flex-wrap items-center justify-around min-h-[90dvh]">
+    <div className="w-full py-2 flex flex-col sm:flex-row flex-wrap items-center justify-around">
       <div className="peer w-full flex-1 lg:w-1/2 h-[65dvh] relative">
         {[...images, ...images].slice(0, 4).map((image, index) => (
           <CarousalImage
@@ -184,6 +189,7 @@ const DetailsContainer = ({ data }) => {
 
 const ProductDetail = ({
   data: {
+    id = "",
     title = "",
     price = 0,
     category = "",
@@ -192,12 +198,11 @@ const ProductDetail = ({
     rating = "",
     returnPolicy = "",
     discountPercentage = 0,
-    id = "",
-    stock = "",
-    thumbnail = "",
   },
+  data,
 }) => {
   const dispatch = useDispatch();
+  const { list } = useSelector((state) => state.wishlist);
   return (
     <div className="z-20 flex flex-col px-4 items-center sm:items-start gap-2 w-full sm:w-1/2">
       <div className="text-xl font-semibold dark:text-gray-200 text-center sm:text-left">
@@ -218,19 +223,28 @@ const ProductDetail = ({
       <p className="hidden sm:block md:w-4/5 text-slate-600 dark:text-gray-400">
         {description}
       </p>
-      <button
-        className="w-40 bg-black text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 "
-        onClick={() =>
-          dispatch(
-            addProductToCart({
-              id,
-              data: { id, price, stock, thumbnail, title },
-            })
-          )
-        }
-      >
-        ADD TO CART
-      </button>
+      <div className="flex gap-2 items-center">
+        <button
+          className="w-40 bg-black text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 "
+          onClick={() => dispatch(addProductToCart(data))}
+        >
+          ADD TO CART
+        </button>
+
+        {list?.[id] ? (
+          <FaHeart
+            className="size-6 text-slate-800 dark:text-slate-400  cursor-pointer hover:scale-125"
+            style={{ filter: "drop-shadow(1px 5px 5px rgb(30, 41, 59,1))" }}
+            onClick={() => dispatch(removeItemFromWishList(id))}
+          />
+        ) : (
+          <FaRegHeart
+            className="size-6 text-slate-800 dark:text-slate-400 cursor-pointer hover:scale-125"
+            style={{ filter: "drop-shadow(1px 5px 5px rgb(30, 41, 59,1))" }}
+            onClick={() => dispatch(addItemToWishList(data))}
+          />
+        )}
+      </div>
       <div className="hidden text-sm text-slate-800 dark:text-gray-300 mt-5 sm:flex gap-1 flex-wrap">
         <p className="flex-[1fr]">100% Original Product |</p>
         <p className="flex-[1fr]">Cash on Delivery available |</p>

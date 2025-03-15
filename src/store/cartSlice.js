@@ -25,15 +25,15 @@ const slice = createSlice({
     total: 0,
     totalProducts: 0,
     totalQuantity: 0,
+    shippingFee: 200,
   },
   reducers: {
     setCartData: (state, { payload }) => {
-      console.log(payload);
-      return payload;
+      if (payload) return payload;
     },
-    addProductToCart: (state, { payload: { data, id } }) => {
+    addProductToCart: (state, { payload: { id, stock, price }, payload }) => {
       if (state.data[id]) {
-        if (state.data[id].quantity < data.stock) {
+        if (state.data[id].quantity < stock) {
           state.data[id].quantity++;
         } else {
           state.updateErrorMsg = {
@@ -43,16 +43,16 @@ const slice = createSlice({
           return;
         }
       } else {
-        state.data[id] = { ...data, quantity: 1 };
+        state.data = { ...state.data, [id]: { ...payload, quantity: 1 } };
         state.updateSuccessMsg = {
           type: "addItem",
           msg: "Item is added into the cart",
         };
       }
-      state.total += data.price;
+      state.total += price;
       state.totalProducts += 1;
       state.totalQuantity += 1;
-      localStorage.setItem("cartData", JSON.stringify(state));
+      localStorage.setItem("cart", JSON.stringify(state));
     },
     removeProductFromCart: (state, { payload: { id } }) => {
       if (state.data[id]) {
@@ -68,7 +68,7 @@ const slice = createSlice({
           type: "removeItem",
           msg: "Successfully removed the item",
         };
-        localStorage.setItem("cartData", JSON.stringify(state));
+        localStorage.setItem("cart", JSON.stringify(state));
       } else {
         state.updateErrorMsg = {
           type: "removeItem",
@@ -82,7 +82,11 @@ const slice = createSlice({
         state.totalProducts -= 1;
         state.totalQuantity -= state.data[id].quantity;
         delete state.data[id];
-        localStorage.setItem("cartData", JSON.stringify(state));
+        localStorage.setItem("cart", JSON.stringify(state));
+        state.updateSuccessMsg = {
+          type: "deleteItem",
+          msg: "Successfully deleted the item",
+        };
       } else {
         state.updateErrorMsg = {
           type: "deleteItem",
@@ -108,5 +112,9 @@ const slice = createSlice({
 });
 
 export const cartReducer = slice.reducer;
-export const { addProductToCart, removeProductFromCart, setCartData } =
-  slice.actions;
+export const {
+  addProductToCart,
+  removeProductFromCart,
+  setCartData,
+  deleteProductFromCart,
+} = slice.actions;

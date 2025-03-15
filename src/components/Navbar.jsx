@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assests/images/logo.png";
 import { Link, NavLink } from "react-router-dom";
-import { CiMenuBurger, CiSearch, CiShoppingCart, CiUser } from "react-icons/ci";
+import {
+  CiMenuBurger,
+  CiSearch,
+  CiShoppingCart,
+  CiUser,
+  CiHeart,
+} from "react-icons/ci";
 import { IoSunnyOutline } from "react-icons/io5";
 import { FaMoon } from "react-icons/fa";
 import { ModalWrapper } from "../modal/ModalWrapper";
+import SignupModal from "../modal/SignupModal";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserData, logOutUser } from "../store/userSlice";
 
 function LinkContainer({ path, pageName, toggleShowModal = () => {} }) {
   return (
@@ -57,21 +66,50 @@ function Logo() {
 }
 
 function User() {
+  const dispatch = useDispatch();
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const {
+    loggedIn,
+    data: { access_token = "" } = {},
+    error,
+  } = useSelector((state) => state.user);
   return (
     <div className="group relative py-2">
-      <CiUser className="group-hover:size-5  transition-all duration-500 text-gray-700 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white" />
+      <CiUser
+        onClick={() => {
+          if (!loggedIn) setShowSignUpModal(!showSignUpModal);
+        }}
+        className="group-hover:size-5  transition-all duration-500 text-gray-700 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white"
+      />
+      {showSignUpModal && (
+        <ModalWrapper closeModal={() => setShowSignUpModal(false)}>
+          <SignupModal closeModal={() => setShowSignUpModal(false)} />
+        </ModalWrapper>
+      )}
       {/* dropdown menu for user profile */}
-      <div
-        className="group-hover:block absolute right-0 top-[2rem] w-40 py-4 px-4
+      {loggedIn && (
+        <div
+          className="group-hover:block absolute right-0 top-[2rem] w-40 py-4 px-4
        bg-slate-200 bg-opacity-5 dark:text-gray-200 rounded-md text-gray-700 hidden"
-      >
-        <p className="cursor-pointer hover:text-black dark:hover:text-white">
-          Profile
-        </p>
-        <p className="cursor-pointer hover:text-black dark:hover:text-white">
-          Logout
-        </p>
-      </div>
+        >
+          <p
+            onClick={() => {
+              dispatch(fetchUserData(`${access_token}1`));
+            }}
+            className="cursor-pointer hover:text-black dark:hover:text-white"
+          >
+            Profile
+          </p>
+          <p
+            onClick={() => {
+              dispatch(logOutUser());
+            }}
+            className="cursor-pointer hover:text-black dark:hover:text-white"
+          >
+            Logout
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -82,6 +120,7 @@ function SideIcons({ toggleShowModal }) {
     document.body.classList.toggle("dark");
     setDarkMode(!darkMode);
   }
+  const { totalQuantity = 0 } = useSelector((state) => state.cart);
   return (
     <div
       className="flex items-center gap-3 [&>*]:cursor-pointer [&>*]:transition-all [&>*]:duration-500 
@@ -89,10 +128,13 @@ function SideIcons({ toggleShowModal }) {
     >
       <CiSearch className="hover:size-5 text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white " />
       <User />
+      <Link to="/wishlist">
+        <CiHeart className="hover:size-5 text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white " />
+      </Link>
       <Link to="/cart" className="relative group">
         <CiShoppingCart className="group-hover:size-5 text-gray-700 group-hover:text-black dark:text-gray-200 dark:group-hover:text-white transition-all duration-500" />
         <div className="bg-black dark:bg-white absolute top-[-8px] right-[-8px] w-4 leading-4 text-center text-white dark:text-black text-[10px] rounded-full">
-          10
+          {totalQuantity}
         </div>
       </Link>
       <CiMenuBurger

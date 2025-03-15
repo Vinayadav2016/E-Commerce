@@ -120,36 +120,21 @@ const FilterContainer = () => {
 };
 const ProductList = ({ productList, isLoading, lastProductElementRef }) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 grid-auto-rows-[1fr]">
-      {productList.map(
-        (
-          { id, title, price, thumbnail, rating, discountPercentage },
-          index
-        ) => {
-          return (
-            <SlideInWrapper key={index}>
-              <Link
-                ref={
-                  index === productList.length - 1
-                    ? lastProductElementRef
-                    : null
-                }
-                to={`/product/${id}`}
-                className="hover:scale-110 transition-all duration-500 ease-in-out flex justify-center h-full"
-              >
-                <ProductItem
-                  id={id}
-                  title={title}
-                  thumbnail={thumbnail}
-                  price={price}
-                  rating={rating}
-                  discountPercentage={discountPercentage}
-                />
-              </Link>
-            </SlideInWrapper>
-          );
-        }
-      )}
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 grid-auto-rows-[1fr]">
+      {productList.map((product, index) => {
+        return (
+          <SlideInWrapper key={index} addedClassName={" h-full"}>
+            <div
+              className="h-full"
+              ref={
+                index === productList.length - 1 ? lastProductElementRef : null
+              }
+            >
+              <ProductItem data={product} heightFull />
+            </div>
+          </SlideInWrapper>
+        );
+      })}
 
       {isLoading && (
         <div className="flex justify-center">
@@ -249,7 +234,7 @@ const Collection = () => {
     [isLoading, hasMore]
   );
   return (
-    <div className="min-h-dvh flex flex-col sm:flex-row gap-5 sm:gap-10 mt-14 pt-8 p-4 sm:pr-4 md:pr-8 lg:pr-12">
+    <div className="flex flex-col sm:flex-row gap-5 sm:gap-10 mt-14 pt-8 p-4 sm:pr-4 md:pr-8 lg:pr-12">
       {/* filter options */}
       <FilterContainer />
       {/* right side  */}

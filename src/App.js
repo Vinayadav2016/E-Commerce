@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchData, fetchCategories } from "./store/productsSlice";
 import Footer from "./components/Footer";
 import { setCartData } from "./store/cartSlice";
+import { setWishlistData } from "./store/wishlistSlice";
+import Wishlist from "./pages/Wishlist";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -21,24 +23,28 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchData(productList.length));
     // dispatch(fetchCartData(6));
-    dispatch(setCartData(JSON.parse(localStorage.getItem("cartData"))));
+    dispatch(setCartData(JSON.parse(localStorage.getItem("cart"))));
+    dispatch(setWishlistData(JSON.parse(localStorage.getItem("wishlist"))));
     dispatch(fetchCategories());
   }, []);
 
   return (
     <div className="w-full bg-gray-300 dark:bg-slate-600 overflow-y-scroll">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/collection" element={<Collection />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/product/:productId" element={<Product />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/placeOrder" element={<PlaceOrder />} />
-        <Route path="/orders" element={<Orders />} />
-      </Routes>
+      <div className="min-h-[90dvh]">
+        <Routes>
+          <Route path="/collection" element={<Collection />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/product/:productId" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/placeOrder" element={<PlaceOrder />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 
-const SlideInWrapper = ({ children }) => {
+const SlideInWrapper = ({ children, addedClassName }) => {
   const ref = useRef();
 
   const [isVisible, setIsVisible] = useState(false);
@@ -25,7 +25,12 @@ const SlideInWrapper = ({ children }) => {
     };
   }, [isVisible]);
   return (
-    <div ref={ref} className={isVisible ? "animate-slide-in" : "opacity-0"}>
+    <div
+      ref={ref}
+      className={
+        (isVisible ? "animate-slide-in " : "opacity-0 ") + addedClassName
+      }
+    >
       {children}
     </div>
   );
