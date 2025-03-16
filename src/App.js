@@ -16,13 +16,13 @@ import Footer from "./components/Footer";
 import { setCartData } from "./store/cartSlice";
 import { setWishlistData } from "./store/wishlistSlice";
 import Wishlist from "./pages/Wishlist";
+import MsgPopUp from "./components/MsgPopUp";
 
 const App = () => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.products.list);
   useEffect(() => {
     dispatch(fetchData(productList.length));
-    // dispatch(fetchCartData(6));
     dispatch(setCartData(JSON.parse(localStorage.getItem("cart"))));
     dispatch(setWishlistData(JSON.parse(localStorage.getItem("wishlist"))));
     dispatch(fetchCategories());
@@ -31,6 +31,7 @@ const App = () => {
   return (
     <div className="w-full bg-gray-300 dark:bg-slate-600 overflow-y-scroll">
       <Navbar />
+      <MsgPopUp />
       <div className="min-h-[90dvh]">
         <Routes>
           <Route path="/collection" element={<Collection />} />

@@ -42,9 +42,13 @@ export const createUser = createAsyncThunk(
           name: username,
           email: `${username}@something.com`,
           password: password,
-          avatar: "https://i.imgur.com/LDOO4Qs.jpg",
+          avatar: "",
         }),
-      }).then((res) => res.json());
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message);
+      }
       return res;
     } catch (error) {
       throw error;
@@ -115,45 +119,52 @@ const slice = createSlice({
     isLoading: false,
     loggedIn: localStorage.getItem("loggedIn") ? true : false,
     error: "",
+    success: "",
   },
   reducers: {
-    logOutUser: (state) => {
-      state.data = {};
-      state.loggedIn = false;
-      state.isLoading = false;
-      state.error = "";
+    logOutUser: () => {
       localStorage.clear();
       window.location.reload();
+    },
+    resetMsg: (state) => {
+      state.success = "";
+      state.error = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
+        state.error = "";
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.data = { ...state.data, ...payload };
         localStorage.setItem("refreshToken", payload.refresh_token);
         state.loggedIn = true;
+        state.success = "User is logged in";
         localStorage.setItem("loggedIn", true);
         state.isLoading = false;
       })
-      .addCase(loginUser.rejected, (state, { error }) => {
-        state.error = error;
+      .addCase(loginUser.rejected, (state, { payload }) => {
+        state.error = payload?.message;
         state.isLoading = false;
       })
       .addCase(createUser.pending, (state) => {
         state.isLoading = true;
+        state.error = "";
       })
       .addCase(createUser.fulfilled, (state) => {
         state.data.userCreated = true;
+        state.success = "User created successfully";
         state.isLoading = false;
       })
-      .addCase(createUser.rejected, (state, { error }) => {
-        state.error = error;
+      .addCase(createUser.rejected, (state, { payload, error }) => {
+        state.error = payload?.message || error?.message;
+        state.isLoading = false;
       })
       .addCase(fetchUserData.pending, (state) => {
         state.isLoading = true;
+        state.error = "";
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         console.log(action);
@@ -167,7 +178,7 @@ const slice = createSlice({
         state.data = {};
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("loggedIn");
-        state.error = payload;
+        state.error = payload?.message;
         state.isLoading = false;
       });
   },

@@ -18,9 +18,8 @@ const slice = createSlice({
   name: "cart",
   initialState: {
     isLoading: false,
-    error: null,
-    updateErrorMsg: null,
-    updateSuccessMsg: null,
+    errorMsg: null,
+    successMsg: null,
     data: {},
     total: 0,
     totalProducts: 0,
@@ -36,7 +35,7 @@ const slice = createSlice({
         if (state.data[id].quantity < stock) {
           state.data[id].quantity++;
         } else {
-          state.updateErrorMsg = {
+          state.errorMsg = {
             type: "addItem",
             msg: "There is no more stock of the item",
           };
@@ -44,7 +43,7 @@ const slice = createSlice({
         }
       } else {
         state.data = { ...state.data, [id]: { ...payload, quantity: 1 } };
-        state.updateSuccessMsg = {
+        state.successMsg = {
           type: "addItem",
           msg: "Item is added into the cart",
         };
@@ -64,13 +63,13 @@ const slice = createSlice({
         } else {
           state.data[id].quantity--;
         }
-        state.updateSuccessMsg = {
+        state.successMsg = {
           type: "removeItem",
           msg: "Successfully removed the item",
         };
         localStorage.setItem("cart", JSON.stringify(state));
       } else {
-        state.updateErrorMsg = {
+        state.errorMsg = {
           type: "removeItem",
           msg: "there is no such product in cart",
         };
@@ -83,12 +82,12 @@ const slice = createSlice({
         state.totalQuantity -= state.data[id].quantity;
         delete state.data[id];
         localStorage.setItem("cart", JSON.stringify(state));
-        state.updateSuccessMsg = {
+        state.successMsg = {
           type: "deleteItem",
           msg: "Successfully deleted the item",
         };
       } else {
-        state.updateErrorMsg = {
+        state.errorMsg = {
           type: "deleteItem",
           msg: "there is no such product in cart",
         };

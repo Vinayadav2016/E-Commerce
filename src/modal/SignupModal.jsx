@@ -5,6 +5,7 @@ import { createUser, loginUser } from "../store/userSlice";
 import { CiUser } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoClose } from "react-icons/io5";
+import { PopUp } from "../components/MsgPopUp";
 // import { createUser } from "../store/userSlice";
 const InputField = ({ value, name, type, labelText, onChange, signIn }) => {
   return (
@@ -16,7 +17,7 @@ const InputField = ({ value, name, type, labelText, onChange, signIn }) => {
       )}
       <div className="relative flex-1">
         <input
-          className="bg-transparent order-none outline-none peer text-base text-gray-200"
+          className="w-full bg-transparent order-none outline-none peer text-base text-gray-200"
           type={type}
           value={value}
           name={name}
@@ -27,7 +28,7 @@ const InputField = ({ value, name, type, labelText, onChange, signIn }) => {
         {!value && (
           <label
             htmlFor={signIn ? `${name}1` : name}
-            className="z-10 text-base font-semibold absolute left-0 text-gray-300 peer-focus:-translate-y-7 transition-all duration-500 ease-in-out"
+            className=" text-base font-semibold absolute left-0 text-gray-300 peer-focus:-translate-y-7 transition-all duration-500 ease-in-out"
           >
             {labelText}
           </label>
@@ -41,6 +42,7 @@ const Form = ({ signIn = false, setIsSignIn, closeModal }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [formError, setFormError] = useState("");
   const {
     error,
     isLoading,
@@ -54,52 +56,79 @@ const Form = ({ signIn = false, setIsSignIn, closeModal }) => {
   }, [loggedIn]);
   useEffect(() => {
     if (userCreated) {
-      console.log("user created please sign in....");
       setIsSignIn(true);
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
     }
   }, [userCreated]);
   const dispatch = useDispatch();
   const onChange = (event) => {
     const { name, value } = event.target;
-    console.log(name, value, "onChange");
     if (name === "username") setUsername(value);
     if (name === "password") setPassword(value);
     if (name === "confirmPassword") setConfirmPassword(value);
   };
-  console.log(signIn, username, password, "onChange");
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(
+      username ? username : false,
+      password ? password : false,
+      confirmPassword ? confirmPassword : ""
+    );
+    if (!username) {
+      setFormError("Username is required");
+      return;
+    }
+    if (!password) {
+      setFormError("Password is required");
+      return;
+    }
     if (signIn) {
       dispatch(loginUser({ username, password }));
     } else {
+      if (!confirmPassword) {
+        setFormError("Confirm Password is required");
+        return;
+      }
       if (password === confirmPassword) {
         dispatch(createUser({ username, password }));
       } else {
-        alert("Passwords do not match");
+        setFormError("Passwords do not match");
       }
     }
-    setIsSignIn(!signIn);
-    setUsername("");
-    setPassword("");
-    setConfirmPassword("");
   };
-  if (error) {
-    return <div>{error.message}</div>;
-  } else if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    if (formError) {
+      const id = setTimeout(() => {
+        setFormError("");
+      }, 4000);
+      return () => clearTimeout(id);
+    }
+  }, [formError]);
+  console.log(formError);
   return (
     <form
-      className={`relative w-full h-full flex flex-col justify-center items-center p-4`}
+      className={`relative w-full flex flex-col justify-center items-center p-4`}
     >
+      {formError && (
+        <div className="absolute top-16 right-2">
+          <PopUp msg={formError} error />
+        </div>
+      )}
       <div className="h-full prata-regular py-3 text-2xl text-center font-semibold text-gray-200">
         {signIn ? "SIGN IN" : "SIGN UP"}
       </div>
-
+      {isLoading && (
+        <div className="z-10 absolute bg-slate-400 dark:bg-slate-800 top-0 left-0 bottom-0 right-0 flex items-center justify-center text-white text-2xl">
+          <div className="animate-pulse">Loading...</div>
+        </div>
+      )}
       <div
         className="absolute -z-20 top-[10%] left-[10%] w-3/4 h-3/4 bg-gradient-to-t blur-[150px] from-slate-800 to-gray-800 dark:from-slate-800 dark:to-gray-200"
         style={{ borderRadius: "20% 30% 80% 10%" }}
       ></div>
+
       <div className="my-5 w-full flex flex-col gap-6 justify-center items-center">
         <InputField
           name="username"
@@ -128,11 +157,13 @@ const Form = ({ signIn = false, setIsSignIn, closeModal }) => {
           />
         )}
       </div>
-      <div
-        className="w-3/4 cursor-pointer text-end text-gray-300 hover:underline underline-offset-2"
-        onClick={() => setIsSignIn(!signIn)}
-      >
-        {signIn ? "Sign Up" : "Sign In"}
+      <div className="w-3/4 text-end text-gray-300 ">
+        <span
+          onClick={() => setIsSignIn(!signIn)}
+          className="cursor-pointer hover:underline underline-offset-2"
+        >
+          {signIn ? "Sign Up" : "Sign In"}
+        </span>
       </div>
       <button
         onClick={handleSubmit}
@@ -147,13 +178,13 @@ const Form = ({ signIn = false, setIsSignIn, closeModal }) => {
 const SignupModal = ({ closeModal }) => {
   const [isSignIn, setIsSignIn] = useState(false);
   return (
-    <div className="z-50 bg-slate-400 dark:bg-slate-800 border-2 border-gray-300 w-3/4 min-h-1/2 md:w-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl flex flex-col justify-center items-center overflow-hidden">
+    <div className="z-50 bg-slate-400 dark:bg-slate-800 border-2 border-gray-300 w-3/4 min-h-[50%] md:w-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl flex flex-col justify-center items-center overflow-hidden shadow-lg shadow-slate-800">
       <IoClose
         onClick={closeModal}
         className="z-[51] absolute top-2 right-2 size-6 dark:text-gray-300 cursor-pointer hover:scale-125"
       />
       <div
-        className={`w-full flex items-center [&>*]:flex-shrink-0 [&>*]:flex-grow-0 transition-all duration-500 ease-in-out ${
+        className={`w-full h-full flex items-stretch [&>*]:flex-shrink-0 [&>*]:flex-grow-0 transition-all duration-500 ease-in-out ${
           isSignIn ? "-translate-x-[100%]" : ""
         }`}
       >
