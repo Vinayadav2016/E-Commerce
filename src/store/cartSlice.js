@@ -17,7 +17,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const slice = createSlice({
   name: "cart",
   initialState: {
-    isLoading: false,
     errorMsg: null,
     successMsg: null,
     data: {},
@@ -29,6 +28,13 @@ const slice = createSlice({
   reducers: {
     setCartData: (state, { payload }) => {
       if (payload) return payload;
+    },
+    resetCartMsgs: (state) => {
+      state.errorMsg = null;
+      state.successMsg = null;
+    },
+    setCartError: (state, { payload }) => {
+      state.errorMsg = payload;
     },
     addProductToCart: (state, { payload: { id, stock, price }, payload }) => {
       if (state.data[id]) {
@@ -43,30 +49,28 @@ const slice = createSlice({
         }
       } else {
         state.data = { ...state.data, [id]: { ...payload, quantity: 1 } };
-        state.successMsg = {
-          type: "addItem",
-          msg: "Item is added into the cart",
-        };
+        state.totalProducts += 1;
       }
       state.total += price;
-      state.totalProducts += 1;
+      state.total = Math.round(state.total * 100) / 100;
       state.totalQuantity += 1;
       localStorage.setItem("cart", JSON.stringify(state));
     },
     removeProductFromCart: (state, { payload: { id } }) => {
       if (state.data[id]) {
         state.total -= state.data[id].price;
-        state.totalProducts -= 1;
+        state.total = Math.round(state.total * 100) / 100;
         state.totalQuantity -= 1;
         if (state.data[id].quantity === 1) {
           delete state.data[id];
+          state.totalProducts -= 1;
+          state.successMsg = {
+            type: "deleteItem",
+            msg: "Successfully removed the item",
+          };
         } else {
           state.data[id].quantity--;
         }
-        state.successMsg = {
-          type: "removeItem",
-          msg: "Successfully removed the item",
-        };
         localStorage.setItem("cart", JSON.stringify(state));
       } else {
         state.errorMsg = {
@@ -78,13 +82,14 @@ const slice = createSlice({
     deleteProductFromCart: (state, { payload: { id } }) => {
       if (state.data[id]) {
         state.total -= state.data[id].price * state.data[id].quantity;
+        state.total = Math.round(state.total * 100) / 100;
         state.totalProducts -= 1;
         state.totalQuantity -= state.data[id].quantity;
         delete state.data[id];
         localStorage.setItem("cart", JSON.stringify(state));
         state.successMsg = {
           type: "deleteItem",
-          msg: "Successfully deleted the item",
+          msg: "Successfully removed the item",
         };
       } else {
         state.errorMsg = {
@@ -94,20 +99,6 @@ const slice = createSlice({
       }
     },
   },
-  // extraReducers: (builder) => {
-  //   builder.addCase(fetchCartData.pending, (state, action) => {
-  //     state.isLoading = true;
-  //     state.error = null;
-  //   });
-  //   builder.addCase(fetchCartData.fulfilled, (state, action) => {
-  //     state.isLoading = false;
-  //     state.data = action.payload.carts[0] || [];
-  //   });
-  //   builder.addCase(fetchCartData.rejected, (state, action) => {
-  //     state.isLoading = false;
-  //     state.error = action.error.message;
-  //   });
-  // },
 });
 
 export const cartReducer = slice.reducer;
@@ -116,4 +107,6 @@ export const {
   removeProductFromCart,
   setCartData,
   deleteProductFromCart,
+  resetCartMsgs,
+  setCartError,
 } = slice.actions;

@@ -9,11 +9,12 @@ import {
   CiHeart,
 } from "react-icons/ci";
 import { IoSunnyOutline } from "react-icons/io5";
-import { FaMoon } from "react-icons/fa";
+import { FaMoon, FaUserCircle } from "react-icons/fa";
 import { ModalWrapper } from "../modal/ModalWrapper";
 import SignupModal from "../modal/SignupModal";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserData, logOutUser } from "../store/userSlice";
+import { logOutUser } from "../store/userSlice";
+import { MdWavingHand } from "react-icons/md";
 
 function LinkContainer({ path, pageName, toggleShowModal = () => {} }) {
   return (
@@ -70,7 +71,7 @@ function User() {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const {
     loggedIn,
-    data: { access_token = "" } = {},
+    data: { name: username = "", email = "" } = {},
     error,
   } = useSelector((state) => state.user);
   return (
@@ -90,21 +91,17 @@ function User() {
       {loggedIn && (
         <div
           className="group-hover:block absolute right-0 top-[2rem] w-40 py-4 px-4
-       bg-slate-200 bg-opacity-5 dark:text-gray-200 rounded-md text-gray-700 hidden"
+       bg-slate-800 dark:bg-slate-200 bg-opacity-20 dark:bg-opacity-20 dark:text-gray-200 rounded-md text-gray-700 hidden"
         >
-          <p
-            onClick={() => {
-              dispatch(fetchUserData(`${access_token}1`));
-            }}
-            className="cursor-pointer hover:text-black dark:hover:text-white"
-          >
-            Profile
-          </p>
+          <div className="cursor-context-menu hover:text-black dark:hover:text-white flex gap-2 items-center justify-center font-semibold">
+            <FaUserCircle />
+            <span className="capitalize  ">{username}</span>
+          </div>
           <p
             onClick={() => {
               dispatch(logOutUser());
             }}
-            className="cursor-pointer hover:text-black dark:hover:text-white"
+            className="cursor-pointer mt-2 hover:text-black dark:hover:text-white"
           >
             Logout
           </p>

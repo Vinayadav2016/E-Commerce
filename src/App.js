@@ -17,17 +17,23 @@ import { setCartData } from "./store/cartSlice";
 import { setWishlistData } from "./store/wishlistSlice";
 import Wishlist from "./pages/Wishlist";
 import MsgPopUp from "./components/MsgPopUp";
+import { fetchUserData } from "./store/userSlice";
 
 const App = () => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.products.list);
+  const { loggedIn, data = {} } = useSelector((state) => state.user);
   useEffect(() => {
     dispatch(fetchData(productList.length));
     dispatch(setCartData(JSON.parse(localStorage.getItem("cart"))));
     dispatch(setWishlistData(JSON.parse(localStorage.getItem("wishlist"))));
     dispatch(fetchCategories());
   }, []);
-
+  useEffect(() => {
+    if (loggedIn) {
+      dispatch(fetchUserData({ accessToken: data?.access_token || "" }));
+    }
+  }, [loggedIn]);
   return (
     <div className="w-full bg-gray-300 dark:bg-slate-600 overflow-y-scroll">
       <Navbar />

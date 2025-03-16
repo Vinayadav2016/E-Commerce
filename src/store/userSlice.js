@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async ({ username, password }, { rejectWithValue }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await fetch(
         "https://api.escuelajs.co/api/v1/auth/login",
@@ -10,7 +10,7 @@ export const loginUser = createAsyncThunk(
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email: `${username}@something.com`,
+            email: email,
             password: password, // optional, defaults to 60
           }),
         }
@@ -32,22 +32,21 @@ export const loginUser = createAsyncThunk(
 
 export const createUser = createAsyncThunk(
   "user/createUser",
-  async ({ username, password }) => {
-    console.log("create user ", username, password);
+  async ({ username, password, email }, { rejectWithValue }) => {
     try {
       const res = await fetch("https://api.escuelajs.co/api/v1/users/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: username,
-          email: `${username}@something.com`,
+          email: email,
           password: password,
-          avatar: "",
+          avatar: "https://picsum.photos/800",
         }),
       });
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message);
+        throw rejectWithValue(errorData.message);
       }
       return res;
     } catch (error) {
@@ -96,7 +95,7 @@ export const fetchUserData = createAsyncThunk(
         res = await fetch("https://api.escuelajs.co/api/v1/auth/profile", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${accessToken}1`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
       }
@@ -126,7 +125,7 @@ const slice = createSlice({
       localStorage.clear();
       window.location.reload();
     },
-    resetMsg: (state) => {
+    resetUserMsgs: (state) => {
       state.success = "";
       state.error = "";
     },
@@ -178,11 +177,11 @@ const slice = createSlice({
         state.data = {};
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("loggedIn");
-        state.error = payload?.message;
+        state.error = "Session Timeout. Please Login!!!";
         state.isLoading = false;
       });
   },
 });
 
 export const userReducer = slice.reducer;
-export const { logOutUser } = slice.actions;
+export const { logOutUser, resetUserMsgs } = slice.actions;

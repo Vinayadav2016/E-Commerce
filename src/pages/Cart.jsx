@@ -1,27 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import Title from "../components/Title";
 import { MdDelete } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import CartTotal from "../components/CartTotal";
-import { Link } from "react-router-dom";
 import {
   addProductToCart,
   deleteProductFromCart,
   removeProductFromCart,
+  setCartError,
 } from "../store/cartSlice";
 import { Rating } from "../components/Rating";
 import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
 import { addItemToWishList } from "../store/wishlistSlice";
+import { ModalWrapper } from "../modal/ModalWrapper";
+import SignupModal from "../modal/SignupModal";
+import { useNavigate } from "react-router-dom";
 const Cart = () => {
-  const { isLoading, error, data = {} } = useSelector((state) => state.cart);
+  const { data = {}, totalProducts } = useSelector((state) => state.cart);
+  const { loggedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+
+  const handleCheckout = () => {
+    if (totalProducts === 0) {
+      dispatch(
+        setCartError({
+          type: "checkout",
+          msg: "Please add items to the cart to proceed.",
+        })
+      );
+    } else if (!loggedIn) {
+      setShowSignUpModal(true);
+    } else {
+      navigate("/placeOrder");
+    }
+  };
   return (
     <div className="mt-14 py-5 px-2 sm:px-4 md:px-8 lg:px-12">
       <div className="text-2xl my-5">
         <Title text1={"YOUR"} text2={"CART"} />
       </div>
+      {showSignUpModal && (
+        <ModalWrapper closeModal={() => setShowSignUpModal(false)}>
+          <SignupModal closeModal={() => setShowSignUpModal(false)} />
+        </ModalWrapper>
+      )}
       <div>
         {Object.values(data).map((item, index) => {
           return (
@@ -103,11 +129,12 @@ const Cart = () => {
         <div className="w-full sm:w-[450px]">
           <CartTotal />
           <div className="w-full mt-5 text-end">
-            <Link to="/placeOrder">
-              <button className="w-30 text-white bg-black text-xs sm:text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 sm:py-3 px-3 md:py-4 md:px-5 items-center justify-center">
-                PROCEED TO CHECKOUT
-              </button>
-            </Link>
+            <button
+              className="w-30 text-white bg-black text-xs sm:text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 sm:py-3 px-3 md:py-4 md:px-5 items-center justify-center"
+              onClick={handleCheckout}
+            >
+              PROCEED TO CHECKOUT
+            </button>
           </div>
         </div>
       </div>

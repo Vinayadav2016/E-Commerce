@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { MdError } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ModalWrapper } from "../modal/ModalWrapper";
 import { AiFillInfoCircle } from "react-icons/ai";
+import { resetUserMsgs } from "../store/userSlice";
+import { resetCartMsgs } from "../store/cartSlice";
 
-export const PopUp = ({ msg, error = false, success = false }) => {
+export const PopUp = ({
+  msg,
+  error = false,
+  success = false,
+  reset = () => {},
+}) => {
   const [isHidden, setIsHidden] = useState(false);
   useEffect(() => {
     if (msg) {
       setIsHidden(false);
       const id = setTimeout(() => {
         setIsHidden(true);
+        reset(); // reset the messages after 4 seconds
       }, 4000);
       return () => clearTimeout(id);
     }
@@ -43,12 +51,37 @@ const MsgPopUp = () => {
     successMsg: cartSuccess,
     data,
   } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   return (
     <div className="z-[55] fixed top-16 right-2">
-      {userError && <PopUp msg={userError} error />}
-      {userSuccess && <PopUp msg={userSuccess} success />}
-      {cartError && <PopUp msg={cartError?.msg} error />}
-      {cartSuccess && <PopUp msg={cartSuccess?.msg} success />}
+      {userError && (
+        <PopUp msg={userError} reset={() => dispatch(resetUserMsgs())} error />
+      )}
+      {userSuccess && (
+        <PopUp
+          msg={userSuccess}
+          success
+          reset={() => dispatch(resetUserMsgs())}
+        />
+      )}
+      {cartError && (
+        <PopUp
+          msg={cartError?.msg}
+          error
+          reset={() => {
+            dispatch(resetCartMsgs());
+          }}
+        />
+      )}
+      {cartSuccess && (
+        <PopUp
+          msg={cartSuccess?.msg}
+          success
+          reset={() => {
+            dispatch(resetCartMsgs());
+          }}
+        />
+      )}
     </div>
   );
 };
