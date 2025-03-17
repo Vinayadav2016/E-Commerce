@@ -29,6 +29,15 @@ const slice = createSlice({
     setCartData: (state, { payload }) => {
       if (payload) return payload;
     },
+    resetCart: (state) => {
+      state.errorMsg = null;
+      state.successMsg = null;
+      state.data = {};
+      state.total = 0;
+      state.totalProducts = 0;
+      state.totalQuantity = 0;
+      localStorage.removeItem("cart");
+    },
     resetCartMsgs: (state) => {
       state.errorMsg = null;
       state.successMsg = null;
@@ -109,4 +118,5 @@ export const {
   deleteProductFromCart,
   resetCartMsgs,
   setCartError,
+  resetCart,
 } = slice.actions;

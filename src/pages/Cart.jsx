@@ -17,6 +17,7 @@ import { addItemToWishList } from "../store/wishlistSlice";
 import { ModalWrapper } from "../modal/ModalWrapper";
 import SignupModal from "../modal/SignupModal";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
 const Cart = () => {
   const { data = {}, totalProducts } = useSelector((state) => state.cart);
   const { loggedIn } = useSelector((state) => state.user);
@@ -53,7 +54,7 @@ const Cart = () => {
           return (
             <div
               key={index}
-              className="flex mb-5 px-4 justify-between items-center flex-wrap md:flex-nowrap"
+              className="flex mb-5 px-4 py-2 justify-between items-center flex-wrap md:flex-nowrap bg-slate-400 dark:bg-opacity-10 shadow-lg shadow-slate-800 rounded-xl"
             >
               <div className="w-full sm:w-1/2 md:w-1/3 flex items-start gap-6">
                 <img
@@ -112,15 +113,15 @@ const Cart = () => {
                 }}
                 className="hover:scale-110 md:hidden ml-1 size-5 cursor-pointer dark:text-gray-300"
               />
-              <button
-                className="hidden md:flex w-30 bg-slate-400 dark:bg-slate-700  dark:text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 items-center justify-center"
+              <Button
                 onClick={() => {
                   dispatch(deleteProductFromCart({ id: item.id }));
                   dispatch(addItemToWishList(item));
                 }}
+                addedClassName="hidden md:flex items-center justify-center w-30 bg-gray-700 dark:bg-slate-700  text-white"
               >
                 MOVE TO <FaRegHeart className="pl-1 size-5" />
-              </button>
+              </Button>
             </div>
           );
         })}
@@ -129,12 +130,12 @@ const Cart = () => {
         <div className="w-full sm:w-[450px]">
           <CartTotal />
           <div className="w-full mt-5 text-end">
-            <button
-              className="w-30 text-white bg-black text-xs sm:text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 sm:py-3 px-3 md:py-4 md:px-5 items-center justify-center"
+            <Button
               onClick={handleCheckout}
+              addedClassName=" py-3 px-3 md:py-4 md:px-5 "
             >
               PROCEED TO CHECKOUT
-            </button>
+            </Button>
           </div>
         </div>
       </div>

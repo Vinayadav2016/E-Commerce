@@ -3,14 +3,14 @@ import Title from "../components/Title";
 import { useSelector } from "react-redux";
 
 const Orders = () => {
-  const data = useSelector((state) => state.cart.data.products);
+  const data = useSelector((state) => state.products.list);
   return (
     <div className="border-t pt-16">
       <div className="text-2xl">
         <Title text1={"MY"} text2={"ORDERS"} />
       </div>
       <div>
-        {data.map((item, index) => {
+        {Object.values(data).map((item, index) => {
           return (
             <div
               key={index}

@@ -15,6 +15,7 @@ import {
   removeItemFromWishList,
 } from "../store/wishlistSlice";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import Button from "../components/Button";
 function CarousalImage({ image, index, buttonPressed }) {
   const animation = buttonPressed
     ? buttonPressed === "right"
@@ -112,14 +113,14 @@ const DescriptionText = ({ title = "", value = "" }) => {
   return (
     <div className="flex">
       <span className="min-w-32 text-slate-800 font-semibold">{title}</span>{" "}
-      <span className="text-gray-400">{value}</span>{" "}
+      <span className="text-gray-800 dark:text-gray-400">{value}</span>{" "}
     </div>
   );
 };
 
 const ReviewDialog = ({ data }) => {
   return (
-    <div className=" bg-slate-400 bg-opacity-10 p-4 rounded-lg flex flex-col items-center justify-center shadow-md shadow-slate-800">
+    <div className="bg-slate-400 bg-opacity-80 dark:bg-opacity-10 p-4 rounded-lg flex flex-col items-center justify-center shadow-md shadow-slate-800">
       <div className="uppercase text-xl font-semibold text-center">
         {data?.reviewerName}
       </div>
@@ -139,11 +140,11 @@ const ReviewDialog = ({ data }) => {
 const DetailsContainer = ({ data }) => {
   const [isReviewTabSelected, setIsReviewTabSelected] = useState(false);
   return (
-    <div className="mx-5 mt-5 dark:bg-slate-600 border-[6px] border-slate-800 rounded-lg shadow-lg shadow-slate-800  ">
-      <div className="flex items-center bg-slate-800 dark:text-gray-300">
+    <div className="mx-5 mt-5  dark:bg-slate-600 border-[6px] border-slate-400 dark:border-slate-800 rounded-lg shadow-lg shadow-slate-800  ">
+      <div className="flex items-center bg-slate-400 dark:bg-slate-800 dark:text-gray-300">
         <button
           className={`font-semibold px-4 py-2 text-xl   ${
-            isReviewTabSelected ? "" : "dark:bg-slate-600"
+            isReviewTabSelected ? "" : "bg-slate-300 dark:bg-slate-600"
           } rounded-t-lg transition-all duration-500 ease-in-out`}
           onClick={() => setIsReviewTabSelected(false)}
         >
@@ -151,7 +152,7 @@ const DetailsContainer = ({ data }) => {
         </button>
         <button
           className={`font-semibold px-4 py-2 text-xl ${
-            isReviewTabSelected ? "dark:bg-slate-600" : ""
+            isReviewTabSelected ? "bg-slate-300 dark:bg-slate-600" : ""
           } rounded-t-lg transition-all duration-500 ease-in-out`}
           onClick={() => setIsReviewTabSelected(true)}
         >
@@ -224,12 +225,12 @@ const ProductDetail = ({
         {description}
       </p>
       <div className="flex gap-2 items-center">
-        <button
-          className="w-40 bg-black text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 "
+        <Button
+          addedClassName="w-40"
           onClick={() => dispatch(addProductToCart(data))}
         >
           ADD TO CART
-        </button>
+        </Button>
 
         {list?.[id] ? (
           <FaHeart

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Title from "../components/Title";
 import { addProductToCart } from "../store/cartSlice";
 import { removeItemFromWishList } from "../store/wishlistSlice";
+import Button from "../components/Button";
 
 const Wishlist = () => {
   const { list = {}, isLoading } = useSelector((state) => state.wishlist);
@@ -24,15 +25,15 @@ const Wishlist = () => {
             <SlideInWrapper key={index} addedClassName="h-full">
               <ProductItem data={product} heightFull />
               <div className="flex justify-center">
-                <button
-                  className="mt-5 w-40 bg-black text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 "
+                <Button
                   onClick={() => {
                     dispatch(addProductToCart(product));
                     dispatch(removeItemFromWishList(product.id));
                   }}
+                  addedClassName="mt-5 w-40"
                 >
                   ADD TO CART
-                </button>
+                </Button>
               </div>
             </SlideInWrapper>
           );

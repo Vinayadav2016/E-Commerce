@@ -21,9 +21,26 @@
 a.active hr {
   width: 50%;
 }
-
 ::-webkit-scrollbar {
   display: none;
+}
+@layer utilities {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s,
+      color 5000s ease-in-out 0s;
+  }
+
+  /* Dark mode styles */
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover,
+  .dark input:-webkit-autofill:focus,
+  .dark input:-webkit-autofill:active {
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+  }
 }
 @media (max-width: 640px) {
   a.active {

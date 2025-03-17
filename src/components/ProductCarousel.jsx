@@ -7,7 +7,6 @@ export const ProductCarousel = ({ productList = [] }) => {
   const [list, setList] = useState(productList);
   const [prevItems, setPrevItems] = useState(5);
   const [buttonPressed, setButtonPressed] = useState(false);
-
   function handleCarousalClick(left) {
     if (!buttonPressed) {
       if (left) {
@@ -31,7 +30,7 @@ export const ProductCarousel = ({ productList = [] }) => {
       const id = setTimeout(() => handleCarousalClick(false), 1500);
       return () => clearTimeout(id);
     }
-  }, [buttonPressed]);
+  }, [buttonPressed, list]);
   useEffect(() => {
     if (productList.length && productList.length < 7) {
       let tempList = productList;

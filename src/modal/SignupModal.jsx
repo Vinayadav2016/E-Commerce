@@ -2,41 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import Title from "../components/Title";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, loginUser } from "../store/userSlice";
-import { CiUser } from "react-icons/ci";
-import { RiLockPasswordLine } from "react-icons/ri";
+
 import { IoClose } from "react-icons/io5";
 import { PopUp } from "../components/MsgPopUp";
-// import { createUser } from "../store/userSlice";
-const InputField = ({ value, name, type, labelText, onChange, signIn }) => {
-  return (
-    <div className="w-full md:w-3/4 py-1 px-1 border-b-2 border-slate-300 flex justify-between items-center gap-3">
-      {name === "username" ? (
-        <CiUser className="text-gray-300" />
-      ) : (
-        <RiLockPasswordLine className="text-gray-300" />
-      )}
-      <div className="relative flex-1">
-        <input
-          className="w-full bg-transparent order-none outline-none peer text-sm text-gray-200"
-          type={type}
-          value={value}
-          name={name}
-          id={signIn ? `${name}1` : name}
-          onChange={onChange}
-          required
-        />
-        {!value && (
-          <label
-            htmlFor={signIn ? `${name}1` : name}
-            className=" text-sm font-semibold absolute left-0 text-gray-300 peer-focus:-translate-y-5 transition-all duration-500 ease-in-out"
-          >
-            {labelText}
-          </label>
-        )}
-      </div>
-    </div>
-  );
-};
+import InputField from "../components/InputField";
 
 const Form = ({ signIn = false, setIsSignIn, closeModal }) => {
   const [username, setUsername] = useState("");
@@ -129,7 +98,7 @@ const Form = ({ signIn = false, setIsSignIn, closeModal }) => {
           style={{ borderRadius: "20% 30% 80% 10%" }}
         ></div>
 
-        <div className="my-5 w-full flex flex-col gap-6 justify-center items-center">
+        <div className="my-5 w-full md:w-3/4 px-4 flex flex-col gap-6 justify-center items-center">
           {!signIn && (
             <InputField
               name="username"

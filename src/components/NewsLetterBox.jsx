@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import Button from "./Button";
 
 const NewsLetterBox = () => {
   const [email, setEmail] = useState("");
@@ -40,9 +41,7 @@ const NewsLetterBox = () => {
             </label>
           )}
         </div>
-        <button className="bg-black text-white text-sm md:text-md rounded-full shadow-lg shadow-gray-800 hover:scale-110 transition-scale duration-500 ease-in-out py-2 px-3 md:py-2 md:px-5 ">
-          SUBSCRIBE
-        </button>
+        <Button addedClassName="md:py-2 lg:py-2">SUBSCRIBE</Button>
       </form>
     </div>
   );
