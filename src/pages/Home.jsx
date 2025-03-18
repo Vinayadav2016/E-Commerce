@@ -4,24 +4,27 @@ import LatestCollection from "../components/LatestCollection";
 import OurPolicy from "../components/OurPolicy";
 import NewsLetterBox from "../components/NewsLetterBox";
 import SlideInWrapper from "../components/SlideInWrapper";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 const Home = () => {
   return (
-    <div className="mt-14 w-full">
-      <Hero />
-      <SlideInWrapper>
-        <LatestCollection />
-      </SlideInWrapper>
-      <div className="px-4 sm:px-6 md:px-10 lg:px-14">
+    <ErrorBoundary errorMsg="Error occurred at Home Page. You can still access other Pages.">
+      <div className="mt-14 w-full">
+        <Hero />
         <SlideInWrapper>
-          <OurPolicy />
+          <LatestCollection />
         </SlideInWrapper>
+        <div className="px-4 sm:px-6 md:px-10 lg:px-14">
+          <SlideInWrapper>
+            <OurPolicy />
+          </SlideInWrapper>
 
-        <SlideInWrapper>
-          <NewsLetterBox />
-        </SlideInWrapper>
+          <SlideInWrapper>
+            <NewsLetterBox />
+          </SlideInWrapper>
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 

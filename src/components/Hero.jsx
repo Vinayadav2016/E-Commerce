@@ -89,11 +89,12 @@ function TextContainer() {
 }
 
 const Hero = () => {
-  const error = "this is error";
-  const { data: productList = [], isLoading } = useSelector(
-    (state) => state.latestProducts || []
-  );
-  return (
+  const {
+    data: productList = [],
+    isLoading,
+    error,
+  } = useSelector((state) => state.latestProducts || []);
+  return error ? null : (
     <div className="w-full sm:flex bg-slate-400 dark:bg-slate-800 p-2 sm:p-4 md:p-8 lg:p-12">
       {/* text */}
       <TextContainer />

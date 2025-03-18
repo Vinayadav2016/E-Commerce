@@ -9,7 +9,9 @@ export default function LatestCollection() {
     error,
     data: productList,
   } = useSelector((state) => state.latestProducts || []);
-  return (
+  return error ? (
+    <></>
+  ) : (
     <div className="my-10">
       <div className="text-center py-8">
         <Title
@@ -24,13 +26,7 @@ export default function LatestCollection() {
         </p>
       </div>
       {/* rendering products */}
-      <>
-        {error ? (
-          <h1>errorr</h1>
-        ) : (
-          <ProductCarousel productList={productList} isLoading={isLoading} />
-        )}
-      </>
+      <ProductCarousel productList={productList} isLoading={isLoading} />
     </div>
   );
 }

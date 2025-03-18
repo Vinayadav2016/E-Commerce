@@ -14,6 +14,7 @@ import { wishlistReducer } from "./store/wishlistSlice";
 import { userReducer } from "./store/userSlice";
 import { ordersReducer } from "./store/ordersSlice";
 import { latestProductsReducer } from "./store/latestProducts";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const store = configureStore({
   reducer: {
@@ -32,9 +33,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ErrorBoundary errorMsg="There was An Error. Please visit after some time.">
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ErrorBoundary>
   </BrowserRouter>
   // </React.StrictMode>
 );

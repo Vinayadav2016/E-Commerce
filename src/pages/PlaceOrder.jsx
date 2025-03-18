@@ -9,6 +9,7 @@ import { resetCart } from "../store/cartSlice";
 import { addOrderData } from "../store/ordersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 const DeliveryInfo = ({ setDeliveryInfo, deliveryInfo }) => {
   return (
@@ -191,49 +192,51 @@ const PlaceOrder = () => {
     }
   }, [totalProducts]);
   return (
-    <div className=" flex flex-col sm:flex-row justify-around items-center gap-6 mt-14 py-5 px-4 md:px-8 lg:px-12">
-      <div className="z-50 fixed top-16 right-2">
-        <PopUp
-          msg={error}
-          error
-          reset={() => {
-            setError("");
-          }}
+    <ErrorBoundary errorMsg="Error occurred at PlaceOrder Page. You can still access other Pages.">
+      <div className=" flex flex-col sm:flex-row justify-around items-center gap-6 mt-14 py-5 px-4 md:px-8 lg:px-12">
+        <div className="z-50 fixed top-16 right-2">
+          <PopUp
+            msg={error}
+            error
+            reset={() => {
+              setError("");
+            }}
+          />
+        </div>
+
+        <DeliveryInfo
+          deliveryInfo={deliveryInfo}
+          setDeliveryInfo={setDeliveryInfo}
         />
-      </div>
-
-      <DeliveryInfo
-        deliveryInfo={deliveryInfo}
-        setDeliveryInfo={setDeliveryInfo}
-      />
-      {/* right side */}
-      <div className="mt-8 sm:mt-0">
-        <div className="mt-8 min-w-80">
-          <CartTotal />
-        </div>
-        <div className="mt-10">
-          <Title text1={"PAYMENT"} text2={"METHOD"} className="text-xl" />
-
-          <div className="flex gap-4 flex-col ">
-            <PaymentMethodDialog
-              paymentMethod={paymentMethod}
-              setPaymentMethod={setPaymentMethod}
-              name="COD"
-              label="CASH ON DELIVERY"
-            />
-            <PaymentMethodDialog
-              paymentMethod={paymentMethod}
-              setPaymentMethod={setPaymentMethod}
-              name="ONLINE"
-              label="ONLINE"
-            />
+        {/* right side */}
+        <div className="mt-8 sm:mt-0">
+          <div className="mt-8 min-w-80">
+            <CartTotal />
           </div>
-          <div className="mt-4 w-full flex justify-end">
-            <Button onClick={handlePlaceOrder}>PLACE ORDER</Button>
+          <div className="mt-10">
+            <Title text1={"PAYMENT"} text2={"METHOD"} className="text-xl" />
+
+            <div className="flex gap-4 flex-col ">
+              <PaymentMethodDialog
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
+                name="COD"
+                label="CASH ON DELIVERY"
+              />
+              <PaymentMethodDialog
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
+                name="ONLINE"
+                label="ONLINE"
+              />
+            </div>
+            <div className="mt-4 w-full flex justify-end">
+              <Button onClick={handlePlaceOrder}>PLACE ORDER</Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 

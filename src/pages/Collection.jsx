@@ -14,6 +14,7 @@ import {
 import SlideInWrapper from "../components/SlideInWrapper";
 import { ModalWrapper } from "../modal/ModalWrapper";
 import CategoryListModal from "../modal/CategoryListModal";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 const Category = ({ selectedCategory, category, handleCategoryChange }) => {
   return (
@@ -232,25 +233,31 @@ const Collection = () => {
     [isLoading, hasMore]
   );
   return (
-    <div className="flex flex-col sm:flex-row gap-5 sm:gap-10 mt-14 pt-8 p-4 sm:pr-4 md:pr-8 lg:pr-12">
-      {/* filter options */}
-      <FilterContainer />
-      {/* right side  */}
+    <ErrorBoundary errorMsg="Error occurred at Collection Page. You can still access other Pages.">
+      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10 mt-14 pt-8 p-4 sm:pr-4 md:pr-8 lg:pr-12">
+        {/* filter options */}
+        <FilterContainer />
+        {/* right side  */}
 
-      <div className="flex-1">
-        <div className="flex flex-col md:flex-row justify-between items-start sm:items-center text-2xl mb-4 font-semibold">
-          <Title text1={"All"} text2={"COLLECTION"} />
-          {/* product sort */}
-          <SortByContainer selectedSort={selectedSort} />
-        </div>
-        {/* map products */}
-        <ProductList
-          productList={productList}
-          isLoading={isLoading}
-          lastProductElementRef={lastProductElementRef}
-        />
+        {error ? (
+          <></>
+        ) : (
+          <div className="flex-1">
+            <div className="flex flex-col md:flex-row justify-between items-start sm:items-center text-2xl mb-4 font-semibold">
+              <Title text1={"All"} text2={"COLLECTION"} />
+              {/* product sort */}
+              <SortByContainer selectedSort={selectedSort} />
+            </div>
+            {/* map products */}
+            <ProductList
+              productList={productList}
+              isLoading={isLoading}
+              lastProductElementRef={lastProductElementRef}
+            />
+          </div>
+        )}
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 

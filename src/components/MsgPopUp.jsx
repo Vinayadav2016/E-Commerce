@@ -5,6 +5,7 @@ import { ModalWrapper } from "../modal/ModalWrapper";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { resetUserMsgs } from "../store/userSlice";
 import { resetCartMsgs } from "../store/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 export const PopUp = ({
   msg,
@@ -43,6 +44,7 @@ export const PopUp = ({
   ) : null;
 };
 const MsgPopUp = () => {
+  const navigate = useNavigate();
   const { error: userError, success: userSuccess } = useSelector(
     (state) => state.user
   );
@@ -51,6 +53,10 @@ const MsgPopUp = () => {
     successMsg: cartSuccess,
     data,
   } = useSelector((state) => state.cart);
+  const { error: productsError } = useSelector((state) => state.products);
+  const { error: singleProductError } = useSelector(
+    (state) => state.singleProduct
+  );
   const dispatch = useDispatch();
   return (
     <div className="z-[55] fixed top-16 right-2">
@@ -82,6 +88,18 @@ const MsgPopUp = () => {
           }}
         />
       )}
+      {productsError ||
+        (singleProductError && (
+          <PopUp
+            msg={`Failed to load ${
+              productsError ? "Products" : "Product"
+            }. Please try again later`}
+            error
+            reset={() => {
+              navigate("/");
+            }}
+          />
+        ))}
     </div>
   );
 };

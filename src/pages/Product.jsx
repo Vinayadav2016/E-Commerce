@@ -20,6 +20,7 @@ import {
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Button from "../components/Button";
 import Loading from "../components/Loading";
+import ErrorBoundary from "../components/ErrorBoundary";
 function CarousalImage({ image, index, buttonPressed }) {
   const animation = buttonPressed
     ? buttonPressed === "right"
@@ -278,21 +279,25 @@ const Product = () => {
     }
   }, [data]);
 
-  return (
-    <div className="mt-14">
-      {/* product data */}
-      {isLoading ? (
-        <Loading className="w-full min-h-dvh bg-slate-800 bg-opacity-20 text-4xl dark:text-white" />
-      ) : (
-        <>
-          <Carousal data={data} />
-        </>
-      )}
-      <SlideInWrapper>
-        <DetailsContainer data={data} isLoading={isLoading} />
-      </SlideInWrapper>
-      <RelatedProducts productDataLoading={isLoading} />
-    </div>
+  return error ? (
+    <></>
+  ) : (
+    <ErrorBoundary errorMsg="Error occurred at Product Page. You can still access other Pages.">
+      <div className="mt-14">
+        {/* product data */}
+        {isLoading ? (
+          <Loading className="w-full min-h-dvh bg-slate-800 bg-opacity-20 text-xl dark:text-white" />
+        ) : (
+          <>
+            <Carousal data={data} />
+          </>
+        )}
+        <SlideInWrapper>
+          <DetailsContainer data={data} isLoading={isLoading} />
+        </SlideInWrapper>
+        <RelatedProducts productDataLoading={isLoading} />
+      </div>
+    </ErrorBoundary>
   );
 };
 
