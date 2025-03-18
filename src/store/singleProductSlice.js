@@ -16,7 +16,7 @@ const slice = createSlice({
   initialState: {
     isLoading: false,
     error: "",
-    data: null,
+    data: {},
   },
   reducers: {},
   extraReducers: (builder) => {

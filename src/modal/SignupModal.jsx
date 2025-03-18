@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import Title from "../components/Title";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, loginUser } from "../store/userSlice";
-
 import { IoClose } from "react-icons/io5";
 import { PopUp } from "../components/MsgPopUp";
 import InputField from "../components/InputField";

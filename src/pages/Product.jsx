@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchProductData } from "../store/singleProductSlice";
+import {
+  fetchProductData,
+  resetProductData,
+} from "../store/singleProductSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRelatedData } from "../store/relatedProductsSlice";
 import RelatedProducts from "../components/RelatedProducts";
@@ -16,6 +19,7 @@ import {
 } from "../store/wishlistSlice";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Button from "../components/Button";
+import Loading from "../components/Loading";
 function CarousalImage({ image, index, buttonPressed }) {
   const animation = buttonPressed
     ? buttonPressed === "right"
@@ -113,7 +117,7 @@ const DescriptionText = ({ title = "", value = "" }) => {
   return (
     <div className="flex">
       <span className="min-w-32 text-slate-800 font-semibold">{title}</span>{" "}
-      <span className="text-gray-800 dark:text-gray-400">{value}</span>{" "}
+      <span className="text-gray-600 dark:text-gray-400">{value}</span>{" "}
     </div>
   );
 };
@@ -128,7 +132,7 @@ const ReviewDialog = ({ data }) => {
         {data?.reviewerEmail}
       </div>
       <Rating rating={data?.rating} />
-      <div className=" text-2xl text-gray-300 text-center">
+      <div className=" text-2xl text-white dark:text-gray-300 text-center">
         <span className="text-3xl">"</span>
         {data?.comment}
         <span className="text-3xl">"</span>
@@ -137,7 +141,7 @@ const ReviewDialog = ({ data }) => {
   );
 };
 
-const DetailsContainer = ({ data }) => {
+const DetailsContainer = ({ data, isLoading = false }) => {
   const [isReviewTabSelected, setIsReviewTabSelected] = useState(false);
   return (
     <div className="mx-5 mt-5  dark:bg-slate-600 border-[6px] border-slate-400 dark:border-slate-800 rounded-lg shadow-lg shadow-slate-800  ">
@@ -160,12 +164,14 @@ const DetailsContainer = ({ data }) => {
         </button>
       </div>
       <div className="p-5 h-[250px] font-medium text-lg flex flex-col gap-2 overflow-y-scroll">
-        {isReviewTabSelected ? (
+        {isLoading ? (
+          <Loading className="bg-slate-400 bg-opacity-10 p-5 h-full rounded-lg dark:text-white" />
+        ) : isReviewTabSelected ? (
           data.reviews.map((review, index) => {
             return <ReviewDialog key={index} data={review} />;
           })
         ) : (
-          <div className="bg-slate-400 bg-opacity-10 rounded-lg p-5">
+          <div className="bg-slate-400 dark:bg-opacity-10 rounded-lg p-5">
             <div className="flex justify-between items-start flex-wrap ">
               <DescriptionText title="Product Name" value={data?.title} />
               <Rating rating={data?.rating} />
@@ -226,7 +232,7 @@ const ProductDetail = ({
       </p>
       <div className="flex gap-2 items-center">
         <Button
-          addedClassName="w-40"
+          className="w-40"
           onClick={() => dispatch(addProductToCart(data))}
         >
           ADD TO CART
@@ -275,11 +281,17 @@ const Product = () => {
   return (
     <div className="mt-14">
       {/* product data */}
-      <Carousal data={data} />
+      {isLoading ? (
+        <Loading className="w-full min-h-dvh bg-slate-800 bg-opacity-20 text-4xl dark:text-white" />
+      ) : (
+        <>
+          <Carousal data={data} />
+        </>
+      )}
       <SlideInWrapper>
-        <DetailsContainer data={data} />
+        <DetailsContainer data={data} isLoading={isLoading} />
       </SlideInWrapper>
-      <RelatedProducts />
+      <RelatedProducts productDataLoading={isLoading} />
     </div>
   );
 };

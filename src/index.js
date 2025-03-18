@@ -13,6 +13,7 @@ import { cartReducer } from "./store/cartSlice";
 import { wishlistReducer } from "./store/wishlistSlice";
 import { userReducer } from "./store/userSlice";
 import { ordersReducer } from "./store/ordersSlice";
+import { latestProductsReducer } from "./store/latestProducts";
 
 const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ const store = configureStore({
     wishlist: wishlistReducer,
     user: userReducer,
     orders: ordersReducer,
+    latestProducts: latestProductsReducer,
   },
 });
 

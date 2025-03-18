@@ -2,72 +2,80 @@ import React from "react";
 import Title from "../components/Title";
 import aboutUsImage from "../assests/images/19368.jpg";
 import NewsLetterBox from "../components/NewsLetterBox";
+import SlideInWrapper from "../components/SlideInWrapper";
+
+const ReasonDialog = ({ heading, reason }) => {
+  return (
+    <div className="shadow-lg shadow-slate-800 p-5 flex flex-col gap-5 bg-slate-400 dark:bg-opacity-20 rounded-xl">
+      <b className="text-lg dark:text-white">{heading}</b>
+      <p className="text-base font-medium text-gray-600 dark:text-gray-300">
+        {reason}
+      </p>
+    </div>
+  );
+};
 const About = () => {
   return (
-    <div>
-      <div className="text-2xl text-center pt-8 border-t">
-        <Title text1={"ABOUT"} text2={"US"} />
-      </div>
+    <div className="mt-14 py-5 px-2 sm:px-4 md:px-8 lg:px-12">
+      <Title
+        text1={"ABOUT"}
+        text2={"US"}
+        className="text-4xl justify-center mt-5"
+      />
       <div className="my-10 flex flex-col md:flex-row gap-16">
-        <img className="w-full md:max-w-[450px]" src={aboutUsImage} />
+        <img
+          className="w-full md:max-w-[450px] shadow-lg shadow-slate-800 rounded-lg"
+          src={aboutUsImage}
+        />
         <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
-            quaerat eum nisi aliquid voluptate optio temporibus libero, alias
-            veritatis odio quae aperiam nesciunt rerum cupiditate. Esse quod
-            vitae odit ducimus. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Vero consequatur, totam officiis illum, sequi
-            dolorem impedit numquam quibusdam eligendi sit voluptates amet ab
-            est, dolorum rem pariatur enim deserunt! Maiores.
+          <p className="text-base text-gray-600 dark:text-gray-300 font-medium ">
+            Welcome to FILPZON, where quality meets convenience! We are
+            passionate about bringing you the best products at unbeatable
+            prices, making shopping effortless, enjoyable, and rewarding.
           </p>
-          <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur
-            est perferendis autem perspiciatis soluta, aliquam repellat mollitia
-            culpa rem error, laborum non fugiat dolorum dolorem cupiditate
-            possimus ipsa provident maxime.
-          </p>
-          <b className="text-gray-800">Our Mission</b>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis
-            incidunt cupiditate illo, quo cum esse consequuntur dolores ipsum
-            fugiat blanditiis, explicabo numquam at ullam. Eligendi totam odit
-            consequuntur perspiciatis? Iusto.
-          </p>
+          <div>
+            <b className="text-gray-800 dark:text-white">Who We Are</b>
+            <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
+              At FLIPZON, we believe in exceptional quality, affordability, and
+              customer satisfaction. Our team is dedicated to curating a diverse
+              selection of products—from fashion and electronics to home
+              essentials and lifestyle must-haves.
+            </p>
+          </div>
+          <div>
+            <b className="text-gray-800 dark:text-white">Our Mission</b>
+            <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
+              Our goal is simple:
+              <br /> ✅ Premium Products – We handpick top-quality items that
+              cater to your everyday needs.
+              <br />✅ Seamless Shopping – A hassle-free shopping experience
+              with secure payments and fast delivery.
+              <br />✅ Customer First – Your satisfaction is our priority, and
+              we’re here to assist you every step of the way.
+            </p>
+          </div>
         </div>
       </div>
-      <div className="text-4xl py-4">
-        <Title text1={"WHY"} text2={"US"} />
-      </div>
-      <div className="flex flex-col md:flex-row text-sm mb-20">
-        <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
-          <b>Quality Assurance:</b>
-          <p className="text-gray-600">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias
-            recusandae eum, sunt, est perferendis asperiores, earum rerum
-            mollitia iure ipsum dignissimos at? Reprehenderit, numquam ut
-            explicabo nesciunt quae commodi corporis.
-          </p>
+      <SlideInWrapper>
+        <Title text1={"WHY"} text2={"US"} className="text-4xl py-4" />
+        <div className="flex flex-col md:flex-row text-sm mb-20 gap-5">
+          <ReasonDialog
+            heading="Quality Assurance:"
+            reason="We believe in offering only the best for our customers. Every product in our collection goes through a strict quality check to ensure durability, reliability, and value for money. Whether it's fashion, electronics, or home essentials, we bring you top-notch items from trusted suppliers and brands."
+          />
+          <ReasonDialog
+            heading="Convenience:"
+            reason="We strive to make shopping easy and enjoyable for our customers. Our convenient store layout, easy-to-use checkout process, and our friendly staff are all designed to make shopping a pleasant experience. We believe that every customer deserves a hassle-free shopping experience."
+          />
+          <ReasonDialog
+            heading="Customer Satisfaction:"
+            reason="We believe in creating a positive customer experience. We strive to provide our customers with excellent service, helpful staff, and a friendly atmosphere. We believe that every customer should feel valued and appreciated, and we're committed to making that happen."
+          />
         </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
-          <b>Convenience:</b>
-          <p className="text-gray-600">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias
-            recusandae eum, sunt, est perferendis asperiores, earum rerum
-            mollitia iure ipsum dignissimos at? Reprehenderit, numquam ut
-            explicabo nesciunt quae commodi corporis.
-          </p>
-        </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
-          <b>Exceptional Customer Service:</b>
-          <p className="text-gray-600">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias
-            recusandae eum, sunt, est perferendis asperiores, earum rerum
-            mollitia iure ipsum dignissimos at? Reprehenderit, numquam ut
-            explicabo nesciunt quae commodi corporis.
-          </p>
-        </div>
-      </div>
-      <NewsLetterBox />
+      </SlideInWrapper>
+      <SlideInWrapper>
+        <NewsLetterBox />
+      </SlideInWrapper>
     </div>
   );
 };

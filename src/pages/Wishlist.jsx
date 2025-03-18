@@ -7,6 +7,7 @@ import Title from "../components/Title";
 import { addProductToCart } from "../store/cartSlice";
 import { removeItemFromWishList } from "../store/wishlistSlice";
 import Button from "../components/Button";
+import NoItemDialog from "../components/NoItemDialog";
 
 const Wishlist = () => {
   const { list = {}, isLoading } = useSelector((state) => state.wishlist);
@@ -18,38 +19,41 @@ const Wishlist = () => {
           WISHLIST
         </div>
       </SlideInWrapper>
+      {Object.values(list).length === 0 ? (
+        <NoItemDialog className="mt-10">NO ITEMS IN WISHLIST</NoItemDialog>
+      ) : (
+        <div className="py-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-6 grid-auto-rows-[1fr]">
+          {Object.values(list).map((product, index) => {
+            return (
+              <SlideInWrapper key={index} className="h-full">
+                <ProductItem data={product} heightFull />
+                <div className="flex justify-center">
+                  <Button
+                    onClick={() => {
+                      dispatch(addProductToCart(product));
+                      dispatch(removeItemFromWishList(product.id));
+                    }}
+                    className="mt-5 w-40"
+                  >
+                    ADD TO CART
+                  </Button>
+                </div>
+              </SlideInWrapper>
+            );
+          })}
 
-      <div className="py-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-6 grid-auto-rows-[1fr]">
-        {Object.values(list).map((product, index) => {
-          return (
-            <SlideInWrapper key={index} addedClassName="h-full">
-              <ProductItem data={product} heightFull />
-              <div className="flex justify-center">
-                <Button
-                  onClick={() => {
-                    dispatch(addProductToCart(product));
-                    dispatch(removeItemFromWishList(product.id));
-                  }}
-                  addedClassName="mt-5 w-40"
-                >
-                  ADD TO CART
-                </Button>
-              </div>
-            </SlideInWrapper>
-          );
-        })}
-
-        {isLoading && (
-          <div className="flex justify-center">
-            <ProductItem isLoading />
-          </div>
-        )}
-        {isLoading && (
-          <div className="flex justify-center">
-            <ProductItem isLoading />
-          </div>
-        )}
-      </div>
+          {isLoading && (
+            <div className="flex justify-center">
+              <ProductItem isLoading />
+            </div>
+          )}
+          {isLoading && (
+            <div className="flex justify-center">
+              <ProductItem isLoading />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

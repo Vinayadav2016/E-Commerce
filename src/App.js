@@ -18,6 +18,8 @@ import { setWishlistData } from "./store/wishlistSlice";
 import Wishlist from "./pages/Wishlist";
 import MsgPopUp from "./components/MsgPopUp";
 import { fetchUserData } from "./store/userSlice";
+import { fetchLatestProducts } from "./store/latestProducts";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -28,6 +30,7 @@ const App = () => {
     dispatch(setCartData(JSON.parse(localStorage.getItem("cart"))));
     dispatch(setWishlistData(JSON.parse(localStorage.getItem("wishlist"))));
     dispatch(fetchCategories());
+    dispatch(fetchLatestProducts());
   }, []);
   useEffect(() => {
     if (loggedIn) {
@@ -38,6 +41,7 @@ const App = () => {
     <div className="w-full bg-gray-300 dark:bg-slate-600 overflow-y-scroll">
       <Navbar />
       <MsgPopUp />
+      <ScrollToTop />
       <div className="min-h-[90dvh]">
         <Routes>
           <Route path="/collection" element={<Collection />} />

@@ -8,13 +8,16 @@ import { PopUp } from "../components/MsgPopUp";
 import { resetCart } from "../store/cartSlice";
 import { addOrderData } from "../store/ordersSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { format } from "date-fns";
 
 const DeliveryInfo = ({ setDeliveryInfo, deliveryInfo }) => {
   return (
     <div className=" flex flex-col gap-4 w-full sm:max-w-[700px] bg-slate-400 dark:bg-opacity-10 shadow-lg shadow-slate-800 p-6 rounded-2xl [&>*:last-child]:mb-5">
-      <div className="text-xl sm:text-2xl my-2">
-        <Title text1={"DELIVERY"} text2={"INFORMATION"} />
-      </div>
+      <Title
+        text1={"DELIVERY"}
+        text2={"INFORMATION"}
+        className="text-xl sm:text-2xl my-2"
+      />
       <div className="flex gap-3">
         {/* value, name, type, labelText, onChange, signIn */}
         <InputField
@@ -142,6 +145,7 @@ const PlaceOrder = () => {
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [deliveryInfo, setDeliveryInfo] = useState({});
   const [error, setError] = useState("");
+  const [orderPlaced, setOrderPlaced] = useState(false);
   const requiredFields = [
     "firstName",
     "street",
@@ -149,6 +153,7 @@ const PlaceOrder = () => {
     "country",
     "phoneNumber",
   ];
+  console.log("placeORder error: ", error);
   const checkEmptyField = () => {
     return requiredFields.find((field) => {
       return !deliveryInfo[field];
@@ -163,11 +168,13 @@ const PlaceOrder = () => {
             deliveryInfo,
             paymentMethod,
             data,
+            date: format(new Date(), "dd/MM/yyyy"),
             total: total + shippingFee,
           })
         );
         dispatch(resetCart());
-        navigate("/orders");
+        setOrderPlaced(true);
+        navigate("/orders", { replace: true });
       } else {
         setError(`Fill the required field ${emptyField.toUpperCase()}`);
       }
@@ -175,22 +182,17 @@ const PlaceOrder = () => {
   };
 
   useEffect(() => {
-    if (totalProducts === 0) {
+    if (totalProducts === 0 && !orderPlaced) {
       setError("Cart is empty navigating to home");
       const id = setTimeout(() => {
-        navigate("/");
+        navigate("/", { replace: true });
       }, 4000);
       return () => clearTimeout(id);
     }
   }, [totalProducts]);
   return (
-    <div className="relative flex flex-col sm:flex-row justify-around items-center gap-6 mt-14 py-5 px-4 md:px-8 lg:px-12">
-      {/* leftSide */}
-      {/*  msg,
-  error = false,
-  success = false,
-  reset = () => {}, */}
-      <div className="absolute top-2 right-2">
+    <div className=" flex flex-col sm:flex-row justify-around items-center gap-6 mt-14 py-5 px-4 md:px-8 lg:px-12">
+      <div className="z-50 fixed top-16 right-2">
         <PopUp
           msg={error}
           error
@@ -210,9 +212,8 @@ const PlaceOrder = () => {
           <CartTotal />
         </div>
         <div className="mt-10">
-          <div className="text-xl">
-            <Title text1={"PAYMENT"} text2={"METHOD"} />
-          </div>
+          <Title text1={"PAYMENT"} text2={"METHOD"} className="text-xl" />
+
           <div className="flex gap-4 flex-col ">
             <PaymentMethodDialog
               paymentMethod={paymentMethod}

@@ -1,47 +1,75 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Title from "../components/Title";
 import { useSelector } from "react-redux";
+import { Rating } from "../components/Rating";
+import Button from "../components/Button";
+import SlideInWrapper from "../components/SlideInWrapper";
+import NoItemDialog from "../components/NoItemDialog";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
-  const data = useSelector((state) => state.products.list);
+  const { data } = useSelector((state) => state.orders);
+  const { loggedIn } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loggedIn) navigate("/", { replace: true });
+  }, [loggedIn]);
   return (
-    <div className="border-t pt-16">
-      <div className="text-2xl">
-        <Title text1={"MY"} text2={"ORDERS"} />
-      </div>
-      <div>
-        {Object.values(data).map((item, index) => {
-          return (
-            <div
-              key={index}
-              className="py-4 border-t border-b text-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
-            >
-              <div className="flex items-start gap-6 text-sm">
-                <img className="w-16 sm:w-20" src={item.thumbnail} />
-                <div>
-                  <p className="sm:text-base font-medium">{item.title}</p>
-                  <div className="flex items-center gap-3 mt-2 text-base text-gray-700">
-                    <p className="text-lg">{item.price}</p>
-                    <p>Quantity {item.quantity}</p>
+    <div className="mt-14  py-5 px-4 md:px-8 lg:px-12">
+      <Title text1={"MY"} text2={"ORDERS"} className="text-2xl" />
+      {data.length === 0 ? (
+        <NoItemDialog>NO ORDERS YET</NoItemDialog>
+      ) : (
+        <div>
+          {data.map((order, index) => {
+            return Object.values(order.data).map((item) => {
+              return (
+                <SlideInWrapper
+                  key={index}
+                  className="p-4 bg-slate-400 dark:bg-opacity-10 rounded-xl shadow-lg shadow-slate-800 flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3"
+                >
+                  <div className="w-full sm:w-1/2 md:w-1/3 flex items-start gap-6">
+                    <img
+                      src={item.thumbnail}
+                      alt={item.title}
+                      className="size-16 sm:size-20"
+                    />
+                    <div>
+                      <p className="text-xs sm:text-lg font-medium dark:text-gray-300">
+                        {item.title}
+                      </p>
+                      <span className="text-lg font-medium">
+                        ${item.price.toFixed(2)}{" "}
+                        <span className="pl-3 text-sm dark:text-gray-300">
+                          {item.discountPercentage
+                            ? ` ( ${item.discountPercentage}% OFF )`
+                            : ""}
+                        </span>
+                      </span>
+                      <Rating rating={item.rating} />
+                      <div className="text-xs sm:text-base font-medium dark:text-gray-300">
+                        Date: {order.date}
+                      </div>
+                    </div>
                   </div>
-                  <p className="mt-2">
-                    Date: <span className="text-gray-400">25 july 2024</span>
-                  </p>
-                </div>
-              </div>
-              <div className="md:w-1/2 flex justify-between">
-                <div className="flex items-center gap-2">
-                  <p className="min-w-2 h-2 rounded-full bg-green-500"></p>
-                  <p className="text-sm md:text-base">Ready to Ship</p>
-                </div>
-                <button className="border px-4 py-2 text-sm font-medium rounded-sm">
-                  Track Order
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+                  <div className="md:w-1/2 flex flex-wrap [&>*]:min-w-1/3 justify-between">
+                    <div className="flex items-center gap-2">
+                      <p className="min-w-2 h-2 rounded-full bg-green-500"></p>
+                      <p className="text-sm md:text-base">Ready to Ship</p>
+                    </div>
+                    <div className="text-xs sm:text-lg font-medium dark:text-gray-300">
+                      Quantity: {item.quantity}
+                    </div>
+                    <div className="text-xs sm:text-lg font-medium dark:text-gray-300">
+                      Total: ${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                  </div>
+                </SlideInWrapper>
+              );
+            });
+          })}
+        </div>
+      )}
     </div>
   );
 };

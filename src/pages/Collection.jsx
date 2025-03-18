@@ -64,8 +64,6 @@ const FilterContainer = () => {
   const {
     selectedCategory,
     categories: categoryList,
-    isLoading,
-    error,
     selectedSort,
   } = useSelector((state) => state.products);
   function handleCategoryChange(category) {
@@ -123,7 +121,7 @@ const ProductList = ({ productList, isLoading, lastProductElementRef }) => {
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 grid-auto-rows-[1fr]">
       {productList.map((product, index) => {
         return (
-          <SlideInWrapper key={index} addedClassName={" h-full"}>
+          <SlideInWrapper key={index} className={" h-full"}>
             <div
               className="h-full"
               ref={

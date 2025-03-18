@@ -1,48 +1,3 @@
-// import React from "react";
-// import logo from "../assests/images/logo.png";
-// const Footer = () => {
-//   return (
-//     <div>
-//       <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-20 text-sm">
-//         <div>
-//           <img src={logo} className="mb-5 w-10" />
-//           <p className="w-full md:w-2/3 text-gray-600">
-//             Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad velit
-//             hic ipsa aliquid incidunt? Repellat fugit nobis beatae molestias
-//             omnis. Doloremque earum, quae odio vel quasi eaque quod sit
-//             consequatur.
-//           </p>
-//         </div>
-//         <div>
-//           <p className="text-xl font-medium mb-5">COMPANY</p>
-//           <ul className="flex flex-col gap-1 text-gray-600">
-//             <li>About Us</li>
-//             <li>Home</li>
-//             <li>Delivery</li>
-//             <li>Privacy Policy</li>
-//           </ul>
-//         </div>
-//         <div>
-//           <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
-//           <ul className="flex flex-col gap-1 text-gray-600">
-//             <li>Email: 123@example.com</li>
-//             <li>Phone: +123 456 7890</li>
-//             <li>Address: 123 Main St, City, State, ZIP</li>
-//           </ul>
-//         </div>
-//       </div>
-//       <div className="flex items-center justify-center text-gray-600 text-xs">
-//         <hr />
-//         <p className="py-5 text-sm text-center">
-//           &copy; 2025 E-Commerce Store. All rights reserved.
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Footer;
-
 import React from "react";
 import logo from "../assests/images/logo.png";
 import { Link } from "react-router-dom";
@@ -66,9 +21,9 @@ const Footer = () => {
         <div className="flex-1 flex flex-col gap-5">
           <Logo />
           <p className="text-md text-gray-600 dark:text-gray-400">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            tristique eleifend lacus, id consectetur diam sodales nec. Donec
-            semper enim at vestibulum semper.
+            FILPZON – Your one-stop shop for quality products at unbeatable
+            prices. Enjoy fast shipping, secure payments, and excellent customer
+            support. Shop with confidence today! 🚀✨
           </p>
         </div>
         {/* company pages */}

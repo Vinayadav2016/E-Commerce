@@ -3,7 +3,7 @@ import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import ProductItem from "./ProductItem";
 import "./ProductCarousel.css";
-export const ProductCarousel = ({ productList = [] }) => {
+export const ProductCarousel = ({ productList = [], isLoading = false }) => {
   const [list, setList] = useState(productList);
   const [prevItems, setPrevItems] = useState(5);
   const [buttonPressed, setButtonPressed] = useState(false);
@@ -26,7 +26,7 @@ export const ProductCarousel = ({ productList = [] }) => {
     if (buttonPressed) {
       const id = setTimeout(() => setButtonPressed(false), 500);
       return () => clearTimeout(id);
-    } else {
+    } else if (!isLoading) {
       const id = setTimeout(() => handleCarousalClick(false), 1500);
       return () => clearTimeout(id);
     }
@@ -76,9 +76,13 @@ export const ProductCarousel = ({ productList = [] }) => {
               : "",
           }}
         >
-          {list.map((product, index) => (
-            <ProductItem key={index} data={product} />
-          ))}
+          {isLoading
+            ? Array.apply(null, Array(10)).map((_, index) => {
+                return <ProductItem key={index} isLoading />;
+              })
+            : list.map((product, index) => (
+                <ProductItem key={index} data={product} />
+              ))}
         </div>
       </div>
 

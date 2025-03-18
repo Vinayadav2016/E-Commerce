@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchRelatedData = createAsyncThunk(
-  "relatedProducts/fetchData",
-  async (category) => {
+export const fetchLatestProducts = createAsyncThunk(
+  "latestProducts/fetchData",
+  async () => {
     try {
       const result = await fetch(
-        `https://dummyjson.com/products/category/${category}`
+        "https://dummyjson.com/products?limit=20&skip=0&sortBy=id&order=desc"
       );
       return result.json();
     } catch (error) {
@@ -14,7 +14,7 @@ export const fetchRelatedData = createAsyncThunk(
   }
 );
 const slice = createSlice({
-  name: "relatedProducts",
+  name: "latestProducts",
   initialState: {
     isLoading: false,
     error: "",
@@ -22,18 +22,18 @@ const slice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchRelatedData.pending, (state, action) => {
+    builder.addCase(fetchLatestProducts.pending, (state, action) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(fetchRelatedData.fulfilled, (state, action) => {
+    builder.addCase(fetchLatestProducts.fulfilled, (state, action) => {
       state.isLoading = false;
       state.data = action.payload.products;
     });
-    builder.addCase(fetchRelatedData.rejected, (state, action) => {
+    builder.addCase(fetchLatestProducts.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
     });
   },
 });
-export const relatedProductsReducer = slice.reducer;
+export const latestProductsReducer = slice.reducer;

@@ -4,22 +4,23 @@ import Title from "./Title";
 import { ProductCarousel } from "./ProductCarousel.jsx";
 import SlideInWrapper from "./SlideInWrapper";
 
-const RelatedProducts = () => {
+const RelatedProducts = ({ productDataLoading = false }) => {
   const { isLoading, error, data } = useSelector(
     (state) => state.relatedProducts || []
   );
   return (
     <SlideInWrapper>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {data && (
-        <div className="my-24">
-          <div className="text-center text-3xl py-2">
-            <Title text1={"RELATED"} text2={"PRODUCTS"} />
-          </div>
-          <ProductCarousel productList={data} />
-        </div>
-      )}
+      <div className="my-24">
+        <Title
+          text1={"RELATED"}
+          text2={"PRODUCTS"}
+          className="text-3xl py-2 justify-center"
+        />
+        <ProductCarousel
+          productList={data}
+          isLoading={isLoading || productDataLoading}
+        />
+      </div>
     </SlideInWrapper>
   );
 };

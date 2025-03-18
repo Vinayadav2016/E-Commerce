@@ -13,7 +13,7 @@ function PolicyCard({ text1, text2, child = () => {} }) {
 }
 const OurPolicy = () => {
   return (
-    <div className="flex flex-col sm:flex-row justify-around gap-12 sm:gap-2 text-center my-20 text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-200 [&>*]:cursor-context-menu">
+    <div className="flex flex-wrap [&>*]:mt-3 [&>*]:min-w-1/2 [&>*]:sm:min-w-1/3 justify-around gap-12 sm:gap-2 text-center my-20 text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-200 [&>*]:cursor-context-menu">
       <PolicyCard
         text1={"Easy Exchange Policy"}
         text2={"We offer hassle free exchange policy"}

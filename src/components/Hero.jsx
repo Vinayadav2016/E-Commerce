@@ -43,13 +43,13 @@ function ImageSlider({ productList }) {
           return (
             <Link
               key={index}
-              className="w-full h-full flex-shrink-0 flex-grow-0"
+              className="w-full h-full flex justify-center flex-shrink-0 flex-grow-0"
               to={`product/${product.id}`}
               style={{ translate: `${-100 * imageIndex}%` }}
             >
               <img
                 key={product.id}
-                className={`w-full h-full object-contain`}
+                className={`object-contain`}
                 src={product.thumbnail}
                 alt={product.title}
               />
@@ -89,13 +89,21 @@ function TextContainer() {
 }
 
 const Hero = () => {
-  const { list: productList } = useSelector((state) => state.products || []);
+  const error = "this is error";
+  const { data: productList = [], isLoading } = useSelector(
+    (state) => state.latestProducts || []
+  );
   return (
     <div className="w-full sm:flex bg-slate-400 dark:bg-slate-800 p-2 sm:p-4 md:p-8 lg:p-12">
       {/* text */}
       <TextContainer />
       {/* image slider */}
-      <ImageSlider productList={productList.slice(0, 10)} />
+      {isLoading && (
+        <div className="w-full sm:w-1/2 flex justify-center items-center">
+          <div className="w-1/2 aspect-square bg-slate-300 dark:bg-slate-400 dark:bg-opacity-20 rounded-full animate-pulse"></div>
+        </div>
+      )}
+      {!isLoading && <ImageSlider productList={productList.slice(10, 20)} />}
     </div>
   );
 };

@@ -41,9 +41,7 @@ const Cart = () => {
   };
   return (
     <div className="mt-14 py-5 px-2 sm:px-4 md:px-8 lg:px-12">
-      <div className="text-2xl my-5">
-        <Title text1={"YOUR"} text2={"CART"} />
-      </div>
+      <Title text1={"YOUR"} text2={"CART"} className="text-2xl my-5" />
       {showSignUpModal && (
         <ModalWrapper closeModal={() => setShowSignUpModal(false)}>
           <SignupModal closeModal={() => setShowSignUpModal(false)} />
@@ -118,7 +116,7 @@ const Cart = () => {
                   dispatch(deleteProductFromCart({ id: item.id }));
                   dispatch(addItemToWishList(item));
                 }}
-                addedClassName="hidden md:flex items-center justify-center w-30 bg-gray-700 dark:bg-slate-700  text-white"
+                className="hidden md:flex items-center justify-center w-30 bg-gray-700 dark:bg-slate-700  text-white"
               >
                 MOVE TO <FaRegHeart className="pl-1 size-5" />
               </Button>
@@ -132,7 +130,7 @@ const Cart = () => {
           <div className="w-full mt-5 text-end">
             <Button
               onClick={handleCheckout}
-              addedClassName=" py-3 px-3 md:py-4 md:px-5 "
+              className=" py-3 px-3 md:py-4 md:px-5 "
             >
               PROCEED TO CHECKOUT
             </Button>

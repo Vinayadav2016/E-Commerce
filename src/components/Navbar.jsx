@@ -91,20 +91,26 @@ function User() {
       {loggedIn && (
         <div
           className="group-hover:block absolute right-0 top-[2rem] w-40 py-4 px-4
-       bg-slate-800 dark:bg-slate-200 bg-opacity-20 dark:bg-opacity-20 dark:text-gray-200 rounded-md text-gray-700 hidden"
+       bg-slate-400 dark:bg-slate-200 dark:bg-opacity-20  dark:text-gray-200 rounded-md text-gray-700 hidden"
         >
-          <div className="cursor-context-menu hover:text-black dark:hover:text-white flex gap-2 items-center justify-center font-semibold">
+          <div className="cursor-context-menu hover:text-black dark:hover:text-white flex gap-2 items-center justify-center font-semibold mb-2">
             <FaUserCircle />
             <span className="capitalize  ">{username}</span>
           </div>
-          <p
+          <Link
+            to="/orders"
+            className="cursor-pointer block p-1 rounded-lg hover:bg-gray-800 hover:dark:bg-slate-800 hover:text-white"
+          >
+            Orders
+          </Link>
+          <div
             onClick={() => {
               dispatch(logOutUser());
             }}
-            className="cursor-pointer mt-2 hover:text-black dark:hover:text-white"
+            className="cursor-pointer p-1 rounded-lg hover:bg-gray-800 hover:dark:bg-slate-800 hover:text-white"
           >
             Logout
-          </p>
+          </div>
         </div>
       )}
     </div>
