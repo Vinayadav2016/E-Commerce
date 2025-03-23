@@ -22,6 +22,11 @@
   }
 }
 
+@keyframes move-left-1 {
+  from {
+    transform: translateX(calc(-100% * 2));
+  }
+}
 @keyframes move-right {
   from {
     transform: translateX(0%);

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import "./ProductCarousel.css";
+import { Rating } from "./Rating";
 
 function ButtonContainer({ onClick = () => {}, left = false }) {
   return (
@@ -22,45 +24,73 @@ function ButtonContainer({ onClick = () => {}, left = false }) {
 }
 
 function ImageSlider({ productList }) {
-  const [imageIndex, setImageIndex] = useState(0);
-  const handleLeftClick = () => {
-    setImageIndex(imageIndex > 0 ? imageIndex - 1 : productList.length - 1);
-  };
-  const handleRightClick = () => {
-    setImageIndex(imageIndex < productList.length - 1 ? imageIndex + 1 : 0);
-  };
+  const [list, setList] = useState(productList);
+  const [buttonPressed, setButtonPressed] = useState(false);
+  function handleCarousalClick(left) {
+    if (!buttonPressed) {
+      if (left) {
+        let tempList = list.slice(0, -1);
+        setList([
+          ...(list.length === 1 ? [] : [list[list.length - 1]]),
+          ...tempList,
+        ]);
+      } else {
+        let [firstProduct, ...tempList] = list;
+        setList([...tempList, firstProduct]);
+      }
+      setButtonPressed(left ? "left" : "right");
+    }
+  }
   useEffect(() => {
-    // set a timer to reset imageIndex after a certain amount of time
-    const timer = setTimeout(() => {
-      handleRightClick();
-    }, 5000);
-    return () => clearTimeout(timer); // clean up the timer when imageIndex changes
-  }, [imageIndex]);
+    if (buttonPressed) {
+      const id = setTimeout(() => setButtonPressed(false), 1000);
+      return () => clearTimeout(id);
+    } else {
+      const id = setTimeout(() => handleCarousalClick(false), 3000);
+      return () => clearTimeout(id);
+    }
+  }, [buttonPressed, list]);
+  useEffect(() => {
+    if (productList.length) {
+      setList(productList);
+    }
+  }, [productList, productList.length]);
+
   return (
-    <div className="w-full sm:w-1/2 aspect-[2/1] relative p-4">
-      <div className="w-full h-full flex overflow-hidden">
-        {productList.map((product, index) => {
+    <div className="w-full sm:w-1/2 aspect-[2/1] relative p-4 overflow-hidden ">
+      <div
+        className="w-full h-full flex -translate-x-[100%]"
+        style={{
+          animation: buttonPressed
+            ? `${
+                buttonPressed == "right" ? "move-right" : `move-left-1`
+              } 1s ease-in-out`
+            : "",
+        }}
+      >
+        {list.map((product, index) => {
           return (
             <Link
               key={index}
-              className="w-full h-full flex justify-center flex-shrink-0 flex-grow-0"
+              className="w-full h-full flex flex-col justify-center items-center flex-shrink-0 flex-grow-0 -translate-x-full"
               to={`product/${product.id}`}
-              style={{ translate: `${-100 * imageIndex}%` }}
             >
               <img
                 key={product.id}
-                className={`object-contain`}
+                className={`h-[90%] object-contain`}
                 src={product.thumbnail}
                 alt={product.title}
               />
+              <div className="dark:text-gray-300">{product.title}</div>
+              {product.rating && <Rating rating={product.rating} />}
             </Link>
           );
         })}
       </div>
       {/* left button */}
-      <ButtonContainer onClick={handleLeftClick} left />
+      <ButtonContainer onClick={() => handleCarousalClick(true)} left />
       {/* right button */}
-      <ButtonContainer onClick={handleRightClick} />
+      <ButtonContainer onClick={() => handleCarousalClick(false)} />
     </div>
   );
 }
