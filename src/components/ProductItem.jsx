@@ -30,7 +30,7 @@ const ProductItem = ({
       }`}
     >
       {!isLoading && (
-        <div className="absolute bottom-2 right-5 z-20">
+        <div className="absolute top-2 right-5 z-20">
           {list?.[id] ? (
             <FaHeart
               className="size-6 text-slate-800 dark:text-slate-400  cursor-pointer hover:scale-125"

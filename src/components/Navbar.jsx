@@ -129,7 +129,7 @@ function SideIcons({ toggleShowModal }) {
       className="flex items-center gap-3 [&>*]:cursor-pointer [&>*]:transition-all [&>*]:duration-500 
     "
     >
-      <CiSearch className="hover:size-5 text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white " />
+      {/* <CiSearch className="hover:size-5 text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white " /> TODO add search functionality*/}
       <User />
       <Link to="/wishlist">
         <CiHeart className="hover:size-5 text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white " />
@@ -176,7 +176,7 @@ const Navbar = () => {
         <ModalWrapper closeModal={toggleShowModal}>
           <NavLinks
             className={
-              "fixed right-0 bottom-0 top-14 w-1/2 flex flex-col  gap-4 py-4 px-5 bg-slate-400 dark:bg-slate-800 "
+              "fixed right-0 bottom-0 top-14 w-1/2 flex flex-col  gap-4 py-4 px-5 bg-slate-400 dark:bg-slate-800 z-[55]"
             }
             toggleShowModal={toggleShowModal}
           />

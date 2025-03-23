@@ -89,7 +89,7 @@ function Carousal({ data }) {
   }
   return (
     <div className="w-full py-2 flex flex-col sm:flex-row flex-wrap items-center justify-around">
-      <div className="peer w-full flex-1 lg:w-1/2 h-[65dvh] relative">
+      <div className="peer w-full flex-1 lg:w-1/2 min-h-[40dvh] sm:min-h-[65dvh] relative">
         {[...images, ...images].slice(0, 4).map((image, index) => (
           <CarousalImage
             key={index}
@@ -211,6 +211,7 @@ const ProductDetail = ({
 }) => {
   const dispatch = useDispatch();
   const { list } = useSelector((state) => state.wishlist);
+  const { data: cartData } = useSelector((state) => state.cart);
   return (
     <div className="z-20 flex flex-col px-4 items-center sm:items-start gap-2 w-full sm:w-1/2">
       <div className="text-xl font-semibold dark:text-gray-200 text-center sm:text-left">
@@ -236,7 +237,7 @@ const ProductDetail = ({
           className="w-40"
           onClick={() => dispatch(addProductToCart(data))}
         >
-          ADD TO CART
+          {cartData?.[id] ? "ADD MORE" : "ADD TO CART"}
         </Button>
 
         {list?.[id] ? (

@@ -16,7 +16,7 @@ function Logo() {
 const Footer = () => {
   return (
     <>
-      <div className="flex justify-around items-start gap-16 w-full px-2 sm:px-4 md:px-8 lg:px-12 py-10 dark:bg-slate-800 bg-slate-400 mt-16">
+      <div className="flex flex-col sm:flex-row justify-around items-start gap-16 w-full px-2 sm:px-4 md:px-8 lg:px-12 py-10 dark:bg-slate-800 bg-slate-400 mt-16">
         {/* logo and information */}
         <div className="flex-1 flex flex-col gap-5">
           <Logo />
